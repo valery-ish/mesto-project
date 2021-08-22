@@ -1,0 +1,15 @@
+.popup__item {
+  box-sizing: border-box;
+  display: block;
+  border: none;
+  padding: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  padding: 11px 0 11px;
+  margin: 0 auto 19px;
+}
+
+.popup__item::placeholder {
+  font-size: 14px;
+  line-height: 17px;
+  color: #000;
+}

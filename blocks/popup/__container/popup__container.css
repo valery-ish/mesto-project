@@ -1,0 +1,6 @@
+.popup__container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 282px;
+}
