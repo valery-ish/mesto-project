@@ -1,8 +1,9 @@
 .header__logo {
   width: 142px;
   height: 33px;
-  background-image: url(https://valery-ish.github.io/mesto-project/images/logo.svg);
-  background-size: cover;
+  background-image: url(../images/logo.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
   margin-bottom: 41px;
   transition: cursor 1s;
 }
