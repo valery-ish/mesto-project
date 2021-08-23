@@ -1,9 +1,0 @@
-.popup__item_change {
-  width: 358px;
-}
-
-@media screen and (max-width: 767px) {
-  .popup__item_change {
-    width: 238px;
-  }
-}

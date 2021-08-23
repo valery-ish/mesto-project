@@ -1,4 +1,4 @@
-.page-section {
+.page__page-section {
   box-sizing: border-box;
   max-width: 940px;
   min-width: 320px;
@@ -7,7 +7,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .page-section {
+  .page__page-section {
     padding: 0 19px;
   }
 }

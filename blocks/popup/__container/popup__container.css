@@ -3,4 +3,11 @@
   display: flex;
   flex-direction: column;
   min-width: 282px;
+  width: 462px;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__container {
+    width: 282px;
+  }
 }

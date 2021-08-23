@@ -1,4 +1,4 @@
-.cards__btn {
+.card__btn {
   box-sizing: border-box;
   padding: 0;
   border: 0;
@@ -10,7 +10,7 @@
   background-image: url(https://valery-ish.github.io/mesto-project/images/like.svg);
 }
 
-.cards__btn:hover {
+.card__btn:hover {
   opacity: 0.5;
   cursor: pointer;
 }

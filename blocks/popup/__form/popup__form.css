@@ -5,4 +5,11 @@
   border-radius: 10px;
   z-index: 101;
   box-sizing: border-box;
+  width: 430px;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__form {
+    width: 282px;
+  }
 }

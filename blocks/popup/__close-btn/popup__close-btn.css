@@ -6,7 +6,7 @@
   background: none;
   width: 32px;
   height: 32px;
-  background-image: url(https://valery-ish.github.io/mesto-project/images/Close-Icon.svg);
+  background-image: url(../images/Close-Icon.svg);
   background-size: cover;
   transition: all 1s;
 }

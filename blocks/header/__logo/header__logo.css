@@ -4,6 +4,11 @@
   background-image: url(https://valery-ish.github.io/mesto-project/images/logo.svg);
   background-size: cover;
   margin-bottom: 41px;
+  transition: cursor 1s;
+}
+
+.header__logo:hover {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 767px) {
@@ -11,5 +16,6 @@
     width: 103.74px;
     height: 24.4px;
     margin-bottom: 31.6px;
+    margin-left: 8px;
   }
 }
