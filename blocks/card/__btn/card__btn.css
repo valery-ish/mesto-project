@@ -7,7 +7,7 @@
   height: 19px;
   background-size: cover;
   transition: all 1s;
-  background-image: url(https://valery-ish.github.io/mesto-project/images/like.svg);
+  background-image: url(../images/like.svg);
 }
 
 .card__btn:hover {
