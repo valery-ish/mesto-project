@@ -1,0 +1,13 @@
+.popup__figure {
+  object-fit: contain;
+  display: flex;
+  flex-flow: column;
+  margin: 0;
+  margin-top: 40px;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__figure {
+    margin-top: 0;
+  }
+}

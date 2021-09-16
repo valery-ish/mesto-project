@@ -29,48 +29,16 @@
 
 
       <section class="cards page__page-section">
-        <article class="card">
-          <img class="card__image" src="./blocks/card/images/karachaevo.jpg" alt="Карачаевск">
-          <div class="card__block-title">
-            <h2 class="card__title">Карачаевск</h2>
-            <button class="card__btn" type="button" aria-label="Нравится"></button>
-          </div>
-        </article>
-        <article class="card">
-          <img class="card__image" src="./blocks/card/images/elbrus.jpg" alt="Гора Эльбрус">
-          <div class="card__block-title">
-            <h2 class="card__title">Гора Эльбрус</h2>
-            <button class="card__btn" type="button" aria-label="Нравится"></button>
-          </div>
-        </article>
-        <article class="card">
-          <img class="card__image" src="./blocks/card/images/dombai.jpg" alt="Домбай">
-          <div class="card__block-title">
-            <h2 class="card__title">Домбай</h2>
-            <button class="card__btn" type="button" aria-label="Нравится"></button>
-          </div>
-        </article>
-        <article class="card">
-          <img class="card__image" src="./blocks/card/images/elbrus.jpg" alt="Гора Эльбрус">
-          <div class="card__block-title">
-            <h2 class="card__title">Гора Эльбрус</h2>
-            <button class="card__btn" type="button" aria-label="Нравится"></button>
-          </div>
-        </article>
-        <article class="card">
-          <img class="card__image" src="./blocks/card/images/dombai.jpg" alt="Домбай">
-          <div class="card__block-title">
-            <h2 class="card__title">Домбай</h2>
-            <button class="card__btn" type="button" aria-label="Нравится"></button>
-          </div>
-        </article>
-        <article class="card">
-          <img class="card__image" src="./blocks/card/images/karachaevo.jpg" alt="Карачаевск">
-          <div class="card__block-title">
-            <h2 class="card__title">Карачаево-Черкесия</h2>
-            <button class="card__btn" type="button" aria-label="Нравится"></button>
-          </div>
-        </article>
+        <template class="card_template">
+          <article class="card">
+            <button class="card__delete-btn" type="button" aria-label="Удвлить"></button>
+            <img class="card__image" src="" alt="">
+            <div class="card__block-title">
+              <h2 class="card__title"></h2>
+              <button class="card__btn" type="button" aria-label="Нравится"></button>
+            </div>
+          </article>
+        </template>
       </section>
 
       <footer class="footer page__page-section">
@@ -79,17 +47,26 @@
     </main>
 
     <article class="popup">
-      <div class="popup__container">
-        <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
-        <form class="popup__form" name="profile-change">
-          <h2 class="popup__title">Редактировать профиль</h2>
-          <input type="text" class="popup__item" id="profile__title" name="profile__title" placeholder="Имя" required>
-          <input type="text" class="popup__item" id="profile__description" name="profile__description" placeholder="Профессия" required>
-          <button type="submit" class="popup__save-btn">Сохранить</button>
-        </form>
-      </div>
+        <div class="popup__container">
+          <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
+          <template class="popup__template-form">
+            <form class="popup__element popup__form">
+              <h2 class="popup__title"></h2>
+              <input type="text" class="popup__item" required>
+              <input type="text" class="popup__item" required>
+              <button type="submit" class="popup__save-btn"></button>
+            </form>
+          </template>
+          <template class="popup__template-image">
+            <figure class="popup__element popup__figure">
+              <img class="popup__image" src="" alt="">
+              <figcaption class="popup__figcaption"></figcaption>
+            </figure>
+          </template>
+        </div>
     </article>
 
   </div>
+  <script src="../mesto-project/scripts/scripts.js"></script>
 </body>
 </html>
