@@ -49,18 +49,25 @@
     <article class="popup">
         <div class="popup__container">
           <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
-          <template class="popup__template-form">
-            <form class="popup__element popup__form">
-              <h2 class="popup__title"></h2>
-              <input type="text" class="popup__item" required>
-              <input type="text" class="popup__item" required>
-              <button type="submit" class="popup__save-btn"></button>
+
+            <form class="modal" id="profile-change" name="profile-change">
+              <h2 class="modal__title">Редактировать профиль</h2>
+              <input type="text" class="modal__item" id="profile__title" name="profile__title" required>
+              <input type="text" class="modal__item" id="profile__description" name="profile__description" required>
+              <button type="submit" class="modal__save-btn" id="profile__change">Сохранить</button>
             </form>
-          </template>
-          <template class="popup__template-image">
-            <figure class="popup__element popup__figure">
-              <img class="popup__image" src="" alt="">
-              <figcaption class="popup__figcaption"></figcaption>
+
+            <form class="modal" id="card-add" name="card-add">
+              <h2 class="modal__title">Новое место</h2>
+              <input type="text" class="modal__item" id="card__title" name="card__title" placeholder="Название" required>
+              <input type="text" class="modal__item" id="card__link" name="card__link" placeholder="Ссылка на картинку" required>
+              <button type="submit" class="modal__save-btn" id="card-add-btn">Создать</button>
+            </form>
+
+          <template class="modal__template-image">
+            <figure class="modal__figure">
+              <img class="modal__image" src="" alt="">
+              <figcaption class="modal__figcaption"></figcaption>
             </figure>
           </template>
         </div>

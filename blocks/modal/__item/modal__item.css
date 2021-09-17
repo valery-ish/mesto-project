@@ -1,4 +1,4 @@
-.popup__item {
+.modal__item {
   box-sizing: border-box;
   display: block;
   border: none;
@@ -8,14 +8,14 @@
   width: 358px;
 }
 
-.popup__item::placeholder {
+.modal__item::placeholder {
   font-size: 14px;
   line-height: 17px;
   color: #000;
 }
 
 @media screen and (max-width: 767px) {
-  .popup__item {
+  .modal__item {
     width: 238px;
   }
 }

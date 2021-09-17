@@ -1,4 +1,4 @@
-.popup__figure {
+.modal__figure {
   object-fit: contain;
   display: flex;
   flex-flow: column;

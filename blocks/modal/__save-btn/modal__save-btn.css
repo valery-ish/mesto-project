@@ -1,4 +1,4 @@
-.popup__save-btn {
+.modal__save-btn {
   border: none;
   padding: 0;
   border-radius: 2px;
@@ -12,12 +12,12 @@
   transition: all 1s;
 }
 
-.popup__save-btn:hover {
+.modal__save-btn:hover {
   opacity: 0.8;
 }
 
 @media screen and (max-width: 767px) {
-  .popup__save-btn {
+  .modal__save-btn {
     margin: 15px auto 26px;
     font-size: 14px;
     line-height: 17px;

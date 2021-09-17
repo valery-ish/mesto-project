@@ -1,5 +1,5 @@
-.popup__form {
-  display: flex;
+.modal {
+  display: none;
   flex-direction: column;
   background-color: #FFFFFF;
   border-radius: 10px;
@@ -10,7 +10,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .popup__form {
+  .modal {
     width: 282px;
     margin-top: 0;
   }
