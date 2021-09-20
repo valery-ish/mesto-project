@@ -46,34 +46,42 @@
       </footer>
     </main>
 
-    <article class="popup">
+    <article class="popup popup_type_profile">
         <div class="popup__container">
           <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
+          <form class="modal" id="profile-change" name="profile-change">
+            <h2 class="modal__title">Редактировать профиль</h2>
+            <input type="text" class="modal__item" id="profile__title" name="profile__title" required>
+            <input type="text" class="modal__item" id="profile__description" name="profile__description" required>
+            <button type="submit" class="modal__save-btn">Сохранить</button>
+          </form>
+        </div>
+      </article>
 
-            <form class="modal" id="profile-change" name="profile-change">
-              <h2 class="modal__title">Редактировать профиль</h2>
-              <input type="text" class="modal__item" id="profile__title" name="profile__title" required>
-              <input type="text" class="modal__item" id="profile__description" name="profile__description" required>
-              <button type="submit" class="modal__save-btn" id="profile__change">Сохранить</button>
-            </form>
+      <article class="popup popup_type_card-add">
+        <div class="popup__container">
+          <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
+          <form class="modal" id="card-add" name="card-add">
+            <h2 class="modal__title">Новое место</h2>
+            <input type="text" class="modal__item" id="card__title" name="card__title" placeholder="Название" required>
+            <input type="text" class="modal__item" id="card__link" name="card__link" placeholder="Ссылка на картинку" required>
+            <button type="submit" class="modal__save-btn">Создать</button>
+          </form>
+        </div>
+      </article>
 
-            <form class="modal" id="card-add" name="card-add">
-              <h2 class="modal__title">Новое место</h2>
-              <input type="text" class="modal__item" id="card__title" name="card__title" placeholder="Название" required>
-              <input type="text" class="modal__item" id="card__link" name="card__link" placeholder="Ссылка на картинку" required>
-              <button type="submit" class="modal__save-btn" id="card-add-btn">Создать</button>
-            </form>
-
-          <template class="modal__template-image">
-            <figure class="modal__figure">
-              <img class="modal__image" src="" alt="">
-              <figcaption class="modal__figcaption"></figcaption>
-            </figure>
-          </template>
+      <article class="popup popup_type_picture">
+        <div class="popup__container">
+          <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
+          <figure class="modal__figure">
+            <img class="modal__image" src="#" alt="">
+            <figcaption class="modal__figcaption"></figcaption>
+          </figure>
         </div>
     </article>
 
   </div>
-  <script src="../mesto-project/scripts/scripts.js"></script>
+  <script src="./scripts/сards.js"></script>
+  <script src="./scripts/scripts.js"></script>
 </body>
 </html>
