@@ -42,12 +42,14 @@ closePopupButton.forEach(element => element.addEventListener('click', () => clos
 /*Функция изменения данных профиля*/
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
+const profileTitleValue = document.querySelector('#profile__title');
+const profileDescriptionValue = document.querySelector('#profile__description');
 
 function profileChangeHandler (evt) {
   evt.preventDefault();
 
-  profileTitle.textContent = document.querySelector('#profile__title').value;
-  profileDescription.textContent = document.querySelector('#profile__description').value;
+  profileTitle.textContent = profileTitleValue.value;
+  profileDescription.textContent = profileDescriptionValue.value;
   closePopup(profilePopup);
 };
 document.querySelector('#profile-change').addEventListener('submit', profileChangeHandler);
@@ -58,8 +60,8 @@ const buttonChangeProfile = document.querySelector('.profile__btn-change');
 buttonChangeProfile.addEventListener('click', function() {
   openPopup(profilePopup);
 
-  document.querySelector('#profile__title').value = profileTitle.textContent;
-  document.querySelector('#profile__description').value = profileDescription.textContent;
+  profileTitleValue.value = profileTitle.textContent;
+  profileDescriptionValue.value = profileDescription.textContent;
 });
 
 /*Открытие окна формы Добавить новое место*/
@@ -73,10 +75,10 @@ buttonAddCard.addEventListener('click', function() {
 function cardSubmitHandler(evt) {
   evt.preventDefault();
   const popup = document.querySelector('.popup_type_card-add');
-  const newCard = [];
-  newCard.name = popup.querySelector('#card__title').value;
-  newCard.link = popup.querySelector('#card__link').value;
-  cardsSection.prepend(createCard(newCard));
+  cardsSection.prepend(createCard({
+    name: popup.querySelector('#card__title').value,
+    link: popup.querySelector('#card__link').value
+  }));
   popup.querySelector('#card-add').reset();
   closePopup(cardPopup);
 }
@@ -84,13 +86,13 @@ function cardSubmitHandler(evt) {
 document.querySelector('#card-add').addEventListener('submit', cardSubmitHandler);
 
 /*Функция лайк*/
-function likeCard() {
-  this.classList.toggle('card__btn_active');
+function likeCard(event) {
+  event.target.classList.toggle('card__btn_active');
 }
 
 /*Кнопка удалить карточку*/
-function deleteCard() {
-    this.closest('.card').remove();
+function deleteCard(event) {
+  event.target.closest('.card').remove();
 }
 
 /*Функция открытия картинки карточки в попап окно на весь экран*/
