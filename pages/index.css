@@ -28,9 +28,14 @@
 @import url(../blocks/popup/__container/popup__container.css);
 @import url(../blocks/popup/__close-btn/popup__close-btn.css);
 @import url(../blocks/modal/modal.css);
+@import url(../blocks/modal/__field/modal__field.css);
 @import url(../blocks/modal/__figcaption/modal__figcaption.css);
 @import url(../blocks/modal/__figure/modal__figure.css);
 @import url(../blocks/modal/__image/modal__image.css);
 @import url(../blocks/modal/__item/modal__item.css);
+@import url(../blocks/modal/__item/_type/modal__item_type_error.css);
 @import url(../blocks/modal/__save-btn/modal__save-btn.css);
+@import url(../blocks/modal/__save-btn/_inactive/modal__save-btn_inactive.css);
 @import url(../blocks/modal/__title/modal__title.css);
+@import url(../blocks/modal/__item-error/modal__item-error.css);
+@import url(../blocks/modal/__item-error/_active/modal__item-error_active.css);

@@ -23,27 +23,56 @@ const profilePopup = document.querySelector('.popup_type_profile');
 const cardPopup = document.querySelector('.popup_type_card-add');
 const imagePopup = document.querySelector('.popup_type_picture');
 
+
 /*Открытие\закрытие попал окна*/
 
 function openPopup(popupType) {
   popupType.classList.add('popup_opened');
   popupType.classList.remove('popup_hide');
+  setClosePopupOverlayClick();
+  setClosePopupEscKeydown();
 }
 
 function closePopup(popupType) {
   popupType.classList.add('popup_hide');
   popupType.classList.remove('popup_opened');
+  document.removeEventListener('click', closePopupOverlayClick);
+  document.removeEventListener('keydown', closePopupEscKeydown);
 }
 
 /*Событие на кнопку закрытия попап окна (формы и картинки)*/
 const closePopupButton = document.querySelectorAll('.popup__close-btn');
 closePopupButton.forEach(element => element.addEventListener('click', () => closePopup(element.closest('.popup'))));
 
+/*Закрытие попапа по оверлею*/
+const closePopupOverlayClick = (event) => {
+  if(event.target.closest('.modal') || event.target.closest('.profile__btn')) return;
+  closePopup(event.target);
+  document.removeEventListener('click', closePopupOverlayClick);
+}
+
+const setClosePopupOverlayClick = () => {
+  document.addEventListener('click', closePopupOverlayClick);
+}
+
+/*Закрытие попапа по Escape*/
+const closePopupEscKeydown = (event) => {
+  if(event.key === 'Escape') {
+    closePopup(document.querySelector('.popup_opened'));
+    document.removeEventListener('keydown', closePopupEscKeydown);
+  }
+}
+
+const setClosePopupEscKeydown = () => {
+  document.addEventListener('keydown', closePopupEscKeydown);
+}
+
+
 /*Функция изменения данных профиля*/
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
-const profileTitleValue = document.querySelector('#profile__title');
-const profileDescriptionValue = document.querySelector('#profile__description');
+const profileTitleValue = document.querySelector('#profile-title');
+const profileDescriptionValue = document.querySelector('#profile-description');
 
 function profileChangeHandler (evt) {
   evt.preventDefault();
@@ -76,8 +105,8 @@ function cardSubmitHandler(evt) {
   evt.preventDefault();
   const popup = document.querySelector('.popup_type_card-add');
   cardsSection.prepend(createCard({
-    name: popup.querySelector('#card__title').value,
-    link: popup.querySelector('#card__link').value
+    name: popup.querySelector('#card-title').value,
+    link: popup.querySelector('#card-link').value
   }));
   popup.querySelector('#card-add').reset();
   closePopup(cardPopup);
