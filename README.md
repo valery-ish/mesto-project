@@ -13,7 +13,3 @@ Flexbox, Grid
 - удаление карточек;
 - увеличение фото;
 - лайки;
-
-**Github Page**
-
-https://valery-kalmykova.github.io/mesto-project/
