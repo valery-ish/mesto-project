@@ -1,16 +1,4 @@
 .popup_opened {
   opacity: 1;
   z-index: 100;
-  animation: show .5s;
-}
-
-@keyframes show {
-  from{
-    opacity: 0;
-    z-index: -1;
-  }
-  to {
-    opacity: 1;
-    z-index: 100;
-  }
 }

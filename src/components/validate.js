@@ -43,9 +43,8 @@ const enableValidation = (config) => {
       inputElement.addEventListener('input', function () {
         checkInputValidity(formElement, inputElement);
         toggleButtonState(inputList, buttonElement);
-      });
-      hideInputError(formElement, inputElement)
-    });
+      })
+    })
     toggleButtonState(inputList, buttonElement);
   };
 

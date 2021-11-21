@@ -26,17 +26,21 @@ const initialCards = [
   }
 ];
 
+const imagePopup = document.querySelector('.popup_type_picture');
+const imagePopupModal = imagePopup.querySelector('.modal__image');
+
 /*Функция создания новой карточки*/
 const createCard = (cardData) => {
   const cardTemplate = document.querySelector('.card_template').content;
   const cardElement = cardTemplate.cloneNode(true);
+  const cardElementImage = cardElement.querySelector('.card__image');
 
+  cardElementImage.src = cardData.link;
+  cardElementImage.alt = cardData.name;
   cardElement.querySelector('.card__title').textContent = cardData.name;
-  cardElement.querySelector('.card__image').src = cardData.link;
-  cardElement.querySelector('.card__image').alt = cardData.name;
   cardElement.querySelector('.card__delete-btn').addEventListener('click', deleteCard);
   cardElement.querySelector('.card__btn').addEventListener('click', likeCard);
-  cardElement.querySelector('.card__image').addEventListener('click', openImageCard);
+  cardElementImage.addEventListener('click', openImageCard);
   return cardElement;
 };
 
@@ -53,11 +57,9 @@ const  deleteCard = (event) => {
 /*Функция открытия картинки карточки в попап окно на весь экран*/
 import {openPopup} from './modal.js'
 const openImageCard = (evt) => {
-  const imagePopup = document.querySelector('.popup_type_picture');
   openPopup(imagePopup);
-
-  imagePopup.querySelector('.modal__image').src = evt.target.src;
-  imagePopup.querySelector('.modal__image').alt = evt.target.alt;
+  imagePopupModal.src = evt.target.src;
+  imagePopupModal.alt = evt.target.alt;
   imagePopup.querySelector('.modal__figcaption').textContent = evt.target.alt;
 }
 
