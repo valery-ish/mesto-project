@@ -34,10 +34,11 @@ popups.forEach((popup) => {
 
 /*Открытие окна формы Редактировать профиль*/
 import {profileTitle, profileDescription, profileTitleValue, profileDescriptionValue, profileChangeHandler, cardSubmitHandler} from './utils.js'
-profileTitleValue.value = profileTitle.textContent;
-profileDescriptionValue.value = profileDescription.textContent;
+
 buttonChangeProfile.addEventListener('click', function() {
   openPopup(profilePopup);
+  profileTitleValue.value = profileTitle.textContent;
+  profileDescriptionValue.value = profileDescription.textContent;
 });
 
 /*Открытие окна формы Добавить новое место*/
@@ -55,5 +56,6 @@ enableValidation({
   submitButtonSelector: '.modal__save-btn',
   inactiveButtonClass: 'modal__save-btn_inactive',
   inputErrorClass: 'modal__item_type_error',
-  errorClass: 'modal__item-error_active'
+  errorClass: 'modal__item-error_active',
+  popup: '.popup'
 });

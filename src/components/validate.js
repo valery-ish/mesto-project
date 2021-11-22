@@ -37,6 +37,9 @@ const enableValidation = (config) => {
   }
 
   const setEventListeners = (formElement) => {
+    formElement.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+    });
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
     const buttonElement = formElement.querySelector(config.submitButtonSelector);
     inputList.forEach((inputElement) => {
@@ -44,16 +47,16 @@ const enableValidation = (config) => {
         checkInputValidity(formElement, inputElement);
         toggleButtonState(inputList, buttonElement);
       })
+      if (inputElement.value !== '') checkInputValidity(formElement, inputElement);
     })
     toggleButtonState(inputList, buttonElement);
   };
 
   const formList = Array.from(document.querySelectorAll(config.formSelector));
   formList.forEach((formElement) => {
-    setEventListeners(formElement);
-    formElement.addEventListener('submit', function (evt) {
-      evt.preventDefault();
-    });
+    formElement.closest(config.popup),addEventListener('click', () => {
+      setEventListeners(formElement);
+    })
   });
 };
 
