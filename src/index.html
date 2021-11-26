@@ -15,13 +15,16 @@
 
     <main class="content">
       <section class="profile page__page-section">
-        <img class="profile__avatar" src="<%=require('./assets/images/Avatar.png')%>" alt="Аватар пользователя">
+        <div class="profile__avatar-container">
+          <img class="profile__avatar" src="" alt="Аватар пользователя">
+          <button class="profile__avatar-btn" type="button"></button>
+        </div>
         <div class="profile__info">
           <div class="profile__block-title">
-            <h1 class="profile__title">Жак-Ив Кусто</h1>
+            <h1 class="profile__title"></h1>
             <button class="profile__btn profile__btn-change" type="button" aria-label="Изменить профиль"></button>
           </div>
-          <p class="profile__description">Исследователь океана</p>
+          <p class="profile__description"></p>
         </div>
         <button class="profile__btn profile__btn-add" type="button" aria-label="Добавить профиль"></button>
       </section>
@@ -68,15 +71,29 @@
           <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
           <form class="modal" id="card-add" name="card-add" novalidate>
             <h2 class="modal__title">Новое место</h2>
-            <label for="profile-title" class="modal__field">
+            <label for="card-title" class="modal__field">
               <input type="text" class="modal__item" id="card-title" name="card-title" placeholder="Название" minlength="2" maxlength="30"  required>
               <span class="modal__item-error card-title-error" ></span>
             </label>
-              <label for="profile-title" class="modal__field">
+            <label for="card-link" class="modal__field">
               <input type="url" class="modal__item" id="card-link" name="card-link" placeholder="Ссылка на картинку" required>
-            <span class="modal__item-error card-link-error" ></span>
+              <span class="modal__item-error card-link-error" ></span>
             </label>
             <button type="submit" class="modal__save-btn">Создать</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="popup popup_type_profile-avatar">
+        <div class="popup__container">
+          <button class="popup__close-btn" type="button" aria-label="Закрыть"></button>
+          <form class="modal" id="profile-avatar" name="profile-avatar" novalidate>
+            <h2 class="modal__title">Обновить аватар</h2>
+            <label for="profile-avatar-link" class="modal__field">
+              <input type="url" class="modal__item" id="profile-avatar-link" name="profile-avatar-link" placeholder="Ссылка на аватар" required>
+              <span class="modal__item-error profile-avatar-link-error" ></span>
+            </label>
+            <button type="submit" class="modal__save-btn">Сохранить</button>
           </form>
         </div>
       </article>

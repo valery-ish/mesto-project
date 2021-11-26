@@ -1,19 +1,43 @@
 import '../assets/pages/index.css';
 import {enableValidation} from './validate.js';
-import {initialCards, createCard} from './сard.js';
+import {createCard} from './сard.js';
 import {openPopup, closePopup, offAutocomplete} from './modal.js';
+import {
+  profileTitle,
+  profileDescription,
+  profileTitleValue,
+  profileDescriptionValue,
+  profileChangeHandler,
+  cardSubmitHandler,
+  profileAvatarChangeHandler,
+  cardsSection,
+  profilePopup,
+  profileAvatar,
+  cardPopup,
+  profileAvatarPopup
+} from './utils.js'
+import {getInitialCards, getProfileInfo} from './api.js'
 
-const cardsSection = document.querySelector('.cards');
-const buttonChangeProfile = document.querySelector('.profile__btn-change');
-const profilePopup = document.querySelector('.popup_type_profile');
-const buttonAddCard = document.querySelector('.profile__btn-add');
-const cardPopup = document.querySelector('.popup_type_card-add');
+// const cardsSection = document.querySelector('.cards');
 const popups = document.querySelectorAll('.popup');
+const buttonChangeProfile = document.querySelector('.profile__btn-change');
+const buttonAddCard = document.querySelector('.profile__btn-add');
+const buttonProfileAvatar = document.querySelector('.profile__avatar-container');
 
-/*Создание стартовых карточек при загрузки страницы*/
-initialCards.forEach ((element) => {
-  cardsSection.append(createCard(element));
+/*Создание стартовых карточек и данных профиля*/
+const getInfo = Promise.all([getInitialCards(), getProfileInfo()])
+getInfo.then(([cards, profile]) =>{
+  Object.values(cards).forEach((card) => {
+    cardsSection.append(createCard(card, profile));
+  });
+  profileTitle.textContent = profile.name;
+  profileDescription.textContent = profile.about;
+  profileAvatar.src = profile.avatar;
+})
+.catch((err) => {
+  console.log(err);
 });
+
 
 /*Закрыть попап окна (формы и картинки) по кнопки или оверлею*/
 popups.forEach((popup) => {
@@ -32,9 +56,8 @@ popups.forEach((popup) => {
   offAutocomplete(popup);
 })
 
-/*Открытие окна формы Редактировать профиль*/
-import {profileTitle, profileDescription, profileTitleValue, profileDescriptionValue, profileChangeHandler, cardSubmitHandler} from './utils.js'
 
+/*Открытие окна формы Редактировать профиль*/
 buttonChangeProfile.addEventListener('click', function() {
   openPopup(profilePopup);
   profileTitleValue.value = profileTitle.textContent;
@@ -46,9 +69,15 @@ buttonAddCard.addEventListener('click', function() {
   openPopup(cardPopup);
 });
 
+/*Открытие окна формы Изменить аватар*/
+buttonProfileAvatar.addEventListener('click', function() {
+  openPopup(profileAvatarPopup);
+});
+
 /*Событие на изменение профиля и добавление карточки*/
 document.querySelector('#card-add').addEventListener('submit', cardSubmitHandler);
 document.querySelector('#profile-change').addEventListener('submit', profileChangeHandler);
+document.querySelector('#profile-avatar').addEventListener('submit', profileAvatarChangeHandler);
 
 enableValidation({
   formSelector: '.modal',
