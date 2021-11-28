@@ -1,6 +1,6 @@
 import '../assets/pages/index.css';
 import {enableValidation} from './validate.js';
-import {createCard} from './сard.js';
+import {createCard, confirmButtonDeletePopup, deleteCard} from './сard.js';
 import {openPopup, closePopup, offAutocomplete} from './modal.js';
 import {
   profileTitle,
@@ -38,15 +38,15 @@ getInfo.then(([cards, profile]) =>{
   console.log(err);
 });
 
-
 /*Закрыть попап окна (формы и картинки) по кнопки или оверлею*/
 popups.forEach((popup) => {
   popup.addEventListener('click', (evt) => {
-      if (evt.target.classList.contains('popup_opened')) {
-          closePopup(popup)
-      }
-      if (evt.target.classList.contains('popup__close-btn')) {
+      if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__close-btn')) {
         closePopup(popup)
+        if(evt.target.classList.contains('popup_type_confirm-delete')) {
+          // confirmButtonDeletePopup.removeEventListener('submit', deleteCard)
+          document.querySelector('.card__to-remove').classList.remove('card__to-remove');
+        }
       }
   })
 })

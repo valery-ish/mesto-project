@@ -1,8 +1,10 @@
 import {putLikeCard, deleteLikeCard, deleteCardApi} from './api.js'
-import {openPopup} from './modal.js'
+import {openPopup, closePopup} from './modal.js'
 
 const imagePopup = document.querySelector('.popup_type_picture');
 const imagePopupModal = imagePopup.querySelector('.modal__image');
+const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
+export const confirmButtonDeletePopup = confirmDeletePopup.querySelector('.modal');
 
 /*Функция создания новой карточки*/
 export const createCard = (cardData, profile) => {
@@ -15,6 +17,7 @@ export const createCard = (cardData, profile) => {
   cardElementImage.src = cardData.link;
   cardElementImage.alt = cardData.name;
   cardElement.querySelector('.card__title').textContent = cardData.name;
+
   /*проверка лайков*/
   if (checkLikeCard(cardData, profile)) {
     cardElementLike.classList.add('card__btn_active')
@@ -23,15 +26,32 @@ export const createCard = (cardData, profile) => {
     likeCard(event, cardData._id, cardElementLike)
   });
   cardElementLike.textContent = cardData.likes.length;
+
   /*проверка кнопки удалить*/
   if(cardData.owner._id === profile._id) {
     cardElementDelete.style.display = 'block'
-    cardElementDelete.addEventListener('click', () => deleteCard(event, cardData._id));
+    cardElementDelete.addEventListener('click', () => openConfirmDeletePopup(event, cardData));
   }
 
   cardElementImage.addEventListener('click', openImageCard);
   return cardElement;
 };
+
+/*Кнопка удалить карточку*/
+function  deleteCard(cardData) {
+  deleteCardApi(cardData._id)
+    .then(() => {
+      closePopup(confirmDeletePopup);
+      document.querySelector('.card__to-remove').remove();
+    })
+}
+
+export function openConfirmDeletePopup(event, cardData) {
+  openPopup(confirmDeletePopup);
+  event.target.closest('.card').classList.add('card__to-remove');
+  confirmButtonDeletePopup.addEventListener('submit', () => {deleteCard(cardData)}, {once: true});
+}
+
 /*Функция лайк*/
 const checkLikeCard = (cardData, profile) => {
   return Object.values(cardData.likes).some(like => like._id === profile._id)
@@ -57,14 +77,6 @@ const likeCard = (event, cardID, cardElementLike) => {
       console.log(err);
     });
   }
-}
-
-/*Кнопка удалить карточку*/
-export const  deleteCard = (event, cardID) => {
-  deleteCardApi(cardID)
-    .then(() => {
-      event.target.closest('.card').remove();
-    })
 }
 
 /*Функция открытия картинки карточки в попап окно на весь экран*/
