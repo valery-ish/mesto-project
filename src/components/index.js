@@ -43,9 +43,6 @@ popups.forEach((popup) => {
   popup.addEventListener('click', (evt) => {
       if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__close-btn')) {
         closePopup(popup)
-        if(evt.target.classList.contains('popup_type_confirm-delete')) {
-          document.querySelector('.card__to-remove').classList.remove('card__to-remove');
-        }
       }
   })
 })
