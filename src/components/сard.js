@@ -30,10 +30,7 @@ export const createCard = (cardData, profile) => {
   /*проверка кнопки удалить*/
   if(cardData.owner._id === profile._id) {
     cardElementDelete.style.display = 'block';
-    cardElement.querySelector('.card').setAttribute('data-id', `${cardData._id}`);
-    cardElementDelete.addEventListener('click', (event) => {
-      openConfirmDeletePopup(event);
-    });
+    cardElementDelete.addEventListener('click', (evt) => handleDelete(evt, cardData));
   }
 
   cardElementImage.addEventListener('click', openImageCard);
@@ -41,27 +38,13 @@ export const createCard = (cardData, profile) => {
 };
 
 /*Кнопка удалить карточку*/
-function  handleSubmitDelete(evt) {
-
-  // deleteCardApi()
-  //   .then(() => {
-  //     closePopup(confirmDeletePopup);
-  //     document.querySelector('.card__to-remove').remove();
-  //   })
-}
-
-function openConfirmDeletePopup(event) {
-  openPopup(confirmDeletePopup);
-  event.target.closest('.card').classList.add('card__to-remove');
-  let cardID = event.target.closest('.card').getAttribute('data-id');
-  console.log(cardID);
-}
-
-confirmButtonDeletePopup.addEventListener('submit', (evt) => {
+function  handleDelete(evt, cardData) {
   evt.preventDefault();
-  handleSubmitDelete(evt);
-  console.log(evt)
-});
+  deleteCardApi(cardData._id)
+    .then(() => {
+      evt.target.closest('.card').remove();
+    })
+}
 
 /*Функция лайк*/
 const checkLikeCard = (cardData, profile) => {
