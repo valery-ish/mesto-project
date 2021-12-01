@@ -1,5 +1,5 @@
 import {putLikeCard, deleteLikeCard, deleteCardApi} from './api.js'
-import {openPopup, closePopup} from './modal.js'
+import {openPopup} from './utils.js'
 
 const imagePopup = document.querySelector('.popup_type_picture');
 const imagePopupModal = imagePopup.querySelector('.modal__image');
@@ -7,7 +7,7 @@ const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
 export const confirmButtonDeletePopup = confirmDeletePopup.querySelector('.modal');
 
 /*Функция создания новой карточки*/
-export const createCard = (cardData, profile) => {
+export const createCard = (cardData, userId) => {
   const cardTemplate = document.querySelector('.card_template').content;
   const cardElement = cardTemplate.cloneNode(true);
   const cardElementImage = cardElement.querySelector('.card__image');
@@ -19,16 +19,16 @@ export const createCard = (cardData, profile) => {
   cardElement.querySelector('.card__title').textContent = cardData.name;
 
   /*проверка лайков*/
-  if (checkLikeCard(cardData, profile)) {
+  if (checkLikeCard(cardData, userId)) {
     cardElementLike.classList.add('card__btn_active')
   };
-  cardElementLike.addEventListener('click', () => {
+  cardElementLike.addEventListener('click', (event) => {
     likeCard(event, cardData._id, cardElementLike)
   });
   cardElementLike.textContent = cardData.likes.length;
 
   /*проверка кнопки удалить*/
-  if(cardData.owner._id === profile._id) {
+  if(cardData.owner._id === userId) {
     cardElementDelete.style.display = 'block';
     cardElementDelete.addEventListener('click', (evt) => handleDelete(evt, cardData));
   }
@@ -44,28 +44,32 @@ function  handleDelete(evt, cardData) {
     .then(() => {
       evt.target.closest('.card').remove();
     })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 /*Функция лайк*/
-const checkLikeCard = (cardData, profile) => {
-  return Object.values(cardData.likes).some(like => like._id === profile._id)
+const checkLikeCard = (cardData, userId) => {
+  return Object.values(cardData.likes).some(like => like._id === userId)
 }
 
 const likeCard = (event, cardID, cardElementLike) => {
-  event.target.classList.toggle('card__btn_active');
-
-  if(event.target.classList.contains('card__btn_active')) {
+  if(!event.target.classList.contains('card__btn_active')) {
     putLikeCard(cardID)
     .then((card) => {
       cardElementLike.textContent = card.likes.length;
+      event.target.classList.add('card__btn_active');
     })
     .catch((err) => {
       console.log(err);
     });
-  } else {
+  }
+  else {
     deleteLikeCard(cardID)
     .then((card) => {
       cardElementLike.textContent = card.likes.length;
+      event.target.classList.remove('card__btn_active');
     })
     .catch((err) => {
       console.log(err);
