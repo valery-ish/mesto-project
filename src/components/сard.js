@@ -1,10 +1,13 @@
 import {putLikeCard, deleteLikeCard, deleteCardApi} from './api.js'
-import {openPopup} from './utils.js'
+import {openPopup, closePopup} from './utils.js'
 
 const imagePopup = document.querySelector('.popup_type_picture');
 const imagePopupModal = imagePopup.querySelector('.modal__image');
 const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
 export const confirmButtonDeletePopup = confirmDeletePopup.querySelector('.modal');
+
+let cardIDToDelete = '';
+let cardToDelete = '';
 
 /*Функция создания новой карточки*/
 export const createCard = (cardData, userId) => {
@@ -30,24 +33,32 @@ export const createCard = (cardData, userId) => {
   /*проверка кнопки удалить*/
   if(cardData.owner._id === userId) {
     cardElementDelete.style.display = 'block';
-    cardElementDelete.addEventListener('click', (evt) => handleDelete(evt, cardData));
+    cardElementDelete.addEventListener('click', (evt) => openConfirmDeletePopup(evt, cardData));
   }
 
   cardElementImage.addEventListener('click', openImageCard);
   return cardElement;
 };
 
+function openConfirmDeletePopup (evt, cardData) {
+  openPopup(confirmDeletePopup);
+  cardIDToDelete = cardData._id;
+  cardToDelete = evt.target.closest('.card');
+}
+
 /*Кнопка удалить карточку*/
-function  handleDelete(evt, cardData) {
-  evt.preventDefault();
-  deleteCardApi(cardData._id)
+function  handleDelete() {
+  deleteCardApi(cardIDToDelete)
     .then(() => {
-      evt.target.closest('.card').remove();
+      // location.reload();
+      cardToDelete.remove();
+      closePopup(confirmDeletePopup);
     })
     .catch((err) => {
       console.log(err);
     });
 }
+confirmButtonDeletePopup.addEventListener('submit', handleDelete)
 
 /*Функция лайк*/
 const checkLikeCard = (cardData, userId) => {
