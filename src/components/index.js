@@ -1,8 +1,8 @@
 import '../assets/pages/index.css';
-import {enableValidation} from './validate.js';
+import {formValidator} from './validate.js';
 import {createCard} from './сard.js';
 import {offAutocomplete, resetInput} from './modal.js';
-import {openPopup, closePopup} from './utils.js'
+import {Popup, PopupWithForm} from './utils.js'
 import {api} from './api.js'
 
 // const cardsSection = document.querySelector('.cards');
@@ -28,6 +28,11 @@ const cardLink = cardPopup.querySelector('#card-link');
 
 let userId = '';
 
+const popupTypeProfile = new PopupWithForm (document.querySelector('.popup_type_profile'));
+const popupTypeCardAdd = new PopupWithForm (document.querySelector('.popup_type_card-add'));
+const popupTypeProfileAvatar = new PopupWithForm (document.querySelector('.popup_type_profile-avatar'));
+const popupTypeConfirmDelete = new PopupWithForm (document.querySelector('.popup_type_confirm-delete'));
+
 /*Создание стартовых карточек и данных профиля*/
 const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
 getInfo.then(([cards, profile]) =>{
@@ -43,30 +48,10 @@ getInfo.then(([cards, profile]) =>{
   console.log(err);
 });
 
-/*Закрыть попап окна (формы и картинки) по кнопки или оверлею*/
-popups.forEach((popup) => {
-  popup.addEventListener('click', (evt) => {
-      if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__close-btn')) {
-        closePopup(popup)
-      }
-  })
-})
-
 popups.forEach((popup) => {
   if (popup.querySelector('.modal'))
   offAutocomplete(popup);
 })
-
-
-enableValidation({
-  formSelector: '.modal',
-  inputSelector: '.modal__item',
-  submitButtonSelector: '.modal__save-btn',
-  inactiveButtonClass: 'modal__save-btn_inactive',
-  inputErrorClass: 'modal__item_type_error',
-  errorClass: 'modal__item-error_active',
-  popup: '.popup'
-});
 
 /*Функция изменения данных профиля*/
 const profileChangeHandler = (evt) => {
@@ -142,3 +127,11 @@ buttonProfileAvatar.addEventListener('click', function() {
 document.querySelector('#card-add').addEventListener('submit', cardSubmitHandler);
 document.querySelector('#profile-change').addEventListener('submit', profileChangeHandler);
 document.querySelector('#profile-avatar').addEventListener('submit', profileAvatarChangeHandler);
+
+
+formValidator.enableValidation();
+
+popupTypeProfile.setEventListeners();
+popupTypeCardAdd.setEventListeners();
+popupTypeProfileAvatar.setEventListeners();
+popupTypeConfirmDelete.setEventListeners();
