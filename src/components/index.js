@@ -3,13 +3,7 @@ import {enableValidation} from './validate.js';
 import {createCard} from './сard.js';
 import {offAutocomplete, resetInput} from './modal.js';
 import {openPopup, closePopup} from './utils.js'
-import {
-  getInitialCards,
-  getProfileInfo,
-  renewProfileInfo,
-  postNewCard,
-  renewProfileAvatar
-} from './api.js'
+import {api} from './api.js'
 
 // const cardsSection = document.querySelector('.cards');
 const popups = document.querySelectorAll('.popup');
@@ -35,7 +29,7 @@ const cardLink = cardPopup.querySelector('#card-link');
 let userId = '';
 
 /*Создание стартовых карточек и данных профиля*/
-const getInfo = Promise.all([getInitialCards(), getProfileInfo()])
+const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
 getInfo.then(([cards, profile]) =>{
   userId = profile._id;
   profileTitle.textContent = profile.name;
@@ -78,7 +72,7 @@ enableValidation({
 const profileChangeHandler = (evt) => {
   evt.preventDefault();
   buttonSubmitChangeProfile.textContent = 'Сохранение...';
-  renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
+  api.renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
     .then((profile) =>{
       profileTitle.textContent = profile.name;
       profileDescription.textContent = profile.about;
@@ -96,7 +90,7 @@ const profileChangeHandler = (evt) => {
 const profileAvatarChangeHandler = (evt) => {
   evt.preventDefault();
   buttonSubmitChangeAvatar.textContent = 'Сохранение...';
-  renewProfileAvatar(profileAvatarSrc.value)
+  api.renewProfileAvatar(profileAvatarSrc.value)
     .then((profile) =>{
       profileAvatar.src = profile.avatar;
       closePopup(profileAvatarPopup);
@@ -113,7 +107,7 @@ const profileAvatarChangeHandler = (evt) => {
 const cardSubmitHandler = (evt) => {
   evt.preventDefault();
   buttonSubmitAddCard.textContent = 'Сохранение...';
-  postNewCard(cardTitle.value, cardLink.value)
+  api.postNewCard(cardTitle.value, cardLink.value)
   .then((card) =>{
     cardsSection.prepend(createCard(card, userId));
     closePopup(cardPopup);
