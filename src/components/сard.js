@@ -1,4 +1,4 @@
-import {putLikeCard, deleteLikeCard, deleteCardApi} from './api.js'
+import {api} from './api.js'
 import {openPopup, closePopup} from './utils.js'
 
 const imagePopup = document.querySelector('.popup_type_picture');
@@ -48,7 +48,7 @@ function openConfirmDeletePopup (evt, cardData) {
 
 /*Кнопка удалить карточку*/
 function  handleDelete() {
-  deleteCardApi(cardIDToDelete)
+  api.deleteCardApi(cardIDToDelete)
     .then(() => {
       // location.reload();
       cardToDelete.remove();
@@ -67,7 +67,7 @@ const checkLikeCard = (cardData, userId) => {
 
 const likeCard = (event, cardID, cardElementLike) => {
   if(!event.target.classList.contains('card__btn_active')) {
-    putLikeCard(cardID)
+    api.putLikeCard(cardID)
     .then((card) => {
       cardElementLike.textContent = card.likes.length;
       event.target.classList.add('card__btn_active');
@@ -77,7 +77,7 @@ const likeCard = (event, cardID, cardElementLike) => {
     });
   }
   else {
-    deleteLikeCard(cardID)
+    api.deleteLikeCard(cardID)
     .then((card) => {
       cardElementLike.textContent = card.likes.length;
       event.target.classList.remove('card__btn_active');

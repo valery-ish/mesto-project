@@ -1,15 +1,9 @@
 import '../assets/pages/index.css';
-import {enableValidation} from './validate.js';
+import {formValidator} from './validate.js';
 import {createCard} from './сard.js';
 import {offAutocomplete, resetInput} from './modal.js';
-import {openPopup, closePopup} from './utils.js'
-import {
-  getInitialCards,
-  getProfileInfo,
-  renewProfileInfo,
-  postNewCard,
-  renewProfileAvatar
-} from './api.js'
+import {Popup, PopupWithForm} from './utils.js'
+import {api} from './api.js'
 
 // const cardsSection = document.querySelector('.cards');
 const popups = document.querySelectorAll('.popup');
@@ -34,8 +28,13 @@ const cardLink = cardPopup.querySelector('#card-link');
 
 let userId = '';
 
+const popupTypeProfile = new PopupWithForm (document.querySelector('.popup_type_profile'));
+const popupTypeCardAdd = new PopupWithForm (document.querySelector('.popup_type_card-add'));
+const popupTypeProfileAvatar = new PopupWithForm (document.querySelector('.popup_type_profile-avatar'));
+const popupTypeConfirmDelete = new PopupWithForm (document.querySelector('.popup_type_confirm-delete'));
+
 /*Создание стартовых карточек и данных профиля*/
-const getInfo = Promise.all([getInitialCards(), getProfileInfo()])
+const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
 getInfo.then(([cards, profile]) =>{
   userId = profile._id;
   profileTitle.textContent = profile.name;
@@ -49,36 +48,16 @@ getInfo.then(([cards, profile]) =>{
   console.log(err);
 });
 
-/*Закрыть попап окна (формы и картинки) по кнопки или оверлею*/
-popups.forEach((popup) => {
-  popup.addEventListener('click', (evt) => {
-      if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__close-btn')) {
-        closePopup(popup)
-      }
-  })
-})
-
 popups.forEach((popup) => {
   if (popup.querySelector('.modal'))
   offAutocomplete(popup);
 })
 
-
-enableValidation({
-  formSelector: '.modal',
-  inputSelector: '.modal__item',
-  submitButtonSelector: '.modal__save-btn',
-  inactiveButtonClass: 'modal__save-btn_inactive',
-  inputErrorClass: 'modal__item_type_error',
-  errorClass: 'modal__item-error_active',
-  popup: '.popup'
-});
-
 /*Функция изменения данных профиля*/
 const profileChangeHandler = (evt) => {
   evt.preventDefault();
   buttonSubmitChangeProfile.textContent = 'Сохранение...';
-  renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
+  api.renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
     .then((profile) =>{
       profileTitle.textContent = profile.name;
       profileDescription.textContent = profile.about;
@@ -96,7 +75,7 @@ const profileChangeHandler = (evt) => {
 const profileAvatarChangeHandler = (evt) => {
   evt.preventDefault();
   buttonSubmitChangeAvatar.textContent = 'Сохранение...';
-  renewProfileAvatar(profileAvatarSrc.value)
+  api.renewProfileAvatar(profileAvatarSrc.value)
     .then((profile) =>{
       profileAvatar.src = profile.avatar;
       closePopup(profileAvatarPopup);
@@ -113,7 +92,7 @@ const profileAvatarChangeHandler = (evt) => {
 const cardSubmitHandler = (evt) => {
   evt.preventDefault();
   buttonSubmitAddCard.textContent = 'Сохранение...';
-  postNewCard(cardTitle.value, cardLink.value)
+  api.postNewCard(cardTitle.value, cardLink.value)
   .then((card) =>{
     cardsSection.prepend(createCard(card, userId));
     closePopup(cardPopup);
@@ -148,3 +127,11 @@ buttonProfileAvatar.addEventListener('click', function() {
 document.querySelector('#card-add').addEventListener('submit', cardSubmitHandler);
 document.querySelector('#profile-change').addEventListener('submit', profileChangeHandler);
 document.querySelector('#profile-avatar').addEventListener('submit', profileAvatarChangeHandler);
+
+
+formValidator.enableValidation();
+
+popupTypeProfile.setEventListeners();
+popupTypeCardAdd.setEventListeners();
+popupTypeProfileAvatar.setEventListeners();
+popupTypeConfirmDelete.setEventListeners();
