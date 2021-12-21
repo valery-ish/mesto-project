@@ -2,33 +2,28 @@ class Api {
   constructor(options) {
     this._baseURL = options.baseURL;
     this._headers = options.headers;
-    this.renderer = {};
   } // https://dev.to/stroemdev/make-fetch-better-and-your-api-request-methods-easier-to-implement-e9i,
   // https://codeburst.io/how-to-call-api-in-a-smart-way-2ca572c6fe86
 
+  _returnStatus(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
 
   getProfileInfo() {
     return fetch(this._baseURL + '/users/me', {
       headers: this._headers
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 
   getInitialCards() {
     return fetch(this._baseURL + '/cards', {
       headers: this._headers
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 
   renewProfileInfo(profileName, profileDescription) {
@@ -40,12 +35,7 @@ class Api {
         about: profileDescription
       })
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 
   postNewCard(cartTitle, cardlink) {
@@ -57,12 +47,7 @@ class Api {
         link: cardlink
       })
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 
   putLikeCard(cardId) {
@@ -70,12 +55,7 @@ class Api {
       method: 'PUT',
       headers: this._headers
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 
   deleteLikeCard (cardId) {
@@ -83,12 +63,7 @@ class Api {
       method: 'DELETE',
       headers: this._headers
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 
   deleteCardApi (cardId) {
@@ -96,12 +71,7 @@ class Api {
       method: 'DELETE',
       headers: this._headers
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 
   renewProfileAvatar (profileAvatar) {
@@ -112,12 +82,7 @@ class Api {
         avatar: profileAvatar
       })
     }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    ).then(this._returnStatus)
   }
 };
 
