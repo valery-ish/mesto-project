@@ -142,14 +142,6 @@ confirmButtonDeletePopup.addEventListener('submit', handleDelete)
 //     }
 // }
 
-// /*Функция открытия картинки карточки в попап окно на весь экран*/
-// const openImageCard = (evt) => {
-//     openPopup(imagePopup);
-//     imagePopupModal.src = evt.target.src;
-//     imagePopupModal.alt = evt.target.alt;
-//     imagePopup.querySelector('.modal__figcaption').textContent = evt.target.alt;
-// }
-
 
 export default class Card {
     constructor(data, selector) {
@@ -178,6 +170,7 @@ export default class Card {
     }
 
     //Нужно Добавить константу popup и popupImage
+    // Смотри в файле util, пока там все попапы
 
     // _handleOpenPopup() {
     //     popupImage.src = this._image;
