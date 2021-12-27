@@ -45,20 +45,6 @@ import {
 //   cardToDelete = evt.target.closest('.card');
 // }
 
-// /*Кнопка удалить карточку*/
-// function  handleDelete() {
-//   api.deleteCardApi(cardIDToDelete)
-//     .then(() => {
-//       // location.reload();
-//       cardToDelete.remove();
-//       closePopup(confirmDeletePopup);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }
-// confirmButtonDeletePopup.addEventListener('submit', handleDelete)
-
 // /*Функция лайк*/
 // const checkLikeCard = (cardData, userId) => {
 //     return Object.values(cardData.likes).some(like => like._id === userId)
@@ -124,9 +110,35 @@ export default class Card {
 //     }
 // }, cardListSelector);
 
-const popupTypeConfirmDelete = new PopupWithForm (confirmDeletePopup);
-const popupWithImage = new PopupWithImage (imagePopup, '.modal__image', '.modal__figcaption');
+const popupTypeConfirmDelete = new PopupWithForm ({
+  selector: confirmDeletePopup,
+  handleButtonClick: () => {
+    api.deleteCardApi(cardIDToDelete)
+    .then(() => {
+      cardToDelete.remove();
+      this.closePopup();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+});
 popupTypeConfirmDelete.setEventListeners();
+// /*Кнопка удалить карточку*/
+// function  handleDelete() {
+//   api.deleteCardApi(cardIDToDelete)
+//     .then(() => {
+//       // location.reload();
+//       cardToDelete.remove();
+//       closePopup(confirmDeletePopup);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// }
+// confirmButtonDeletePopup.addEventListener('submit', handleDelete)
+
+const popupWithImage = new PopupWithImage (imagePopup, '.modal__image', '.modal__figcaption');
 popupWithImage.setEventListeners();
 
 

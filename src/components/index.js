@@ -9,6 +9,17 @@ import {
   profilePopup,
   cardPopup,
   profileAvatarPopup,
+  profileTitle,
+  profileDescription,
+  profileTitleValue,
+  profileDescriptionValue,
+  buttonSubmitChangeProfile,
+  buttonSubmitChangeAvatar,
+  profileAvatar,
+  profileAvatarSrc,
+  buttonSubmitAddCard,
+  cardTitle,
+  cardLink
 } from './constants.js';
 
 // const cardsSection = document.querySelector('.cards');
@@ -16,10 +27,6 @@ import {
 const buttonChangeProfile = document.querySelector('.profile__btn-change');
 const buttonAddCard = document.querySelector('.profile__btn-add');
 const buttonProfileAvatar = document.querySelector('.profile__avatar-container');
-
-
-
-
 
 // /*Создание стартовых карточек и данных профиля*/
 // let userId = '';
@@ -51,12 +58,66 @@ const formValidator = new FormValidator({
 formValidator.enableValidation();
 
 /*Попапы*/
-const popupTypeProfile = new PopupWithForm (profilePopup);
-const popupTypeCardAdd = new PopupWithForm (cardPopup);
-const popupTypeProfileAvatar = new PopupWithForm (profileAvatarPopup);
-
+const popupTypeProfile = new PopupWithForm ({
+  selector: profilePopup,
+  handleButtonClick: (evt) => {
+    evt.preventDefault();
+    buttonSubmitChangeProfile.textContent = 'Сохранение...';
+    api.renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
+      .then((profile) =>{
+        profileTitle.textContent = profile.name;
+        profileDescription.textContent = profile.about;
+        this.closePopup();
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        buttonSubmitChangeProfile.textContent = 'Сохранено';
+      })
+  }
+});
 popupTypeProfile.setEventListeners();
+
+const popupTypeCardAdd = new PopupWithForm ({
+  selector: cardPopup,
+  handleButtonClick: (evt) => {
+    evt.preventDefault();
+    buttonSubmitAddCard.textContent = 'Сохранение...';
+    api.postNewCard(cardTitle.value, cardLink.value)
+    .then((card) =>{
+      // cardsSection.prepend(createCard(card, userId));
+      this.closePopup();
+      this._resetModal();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      buttonSubmitAddCard.textContent = 'Сохранено';
+    })
+  }
+});
 popupTypeCardAdd.setEventListeners();
+
+const popupTypeProfileAvatar = new PopupWithForm ({
+  selector: profileAvatarPopup,
+  handleButtonClick: (evt) => {
+    evt.preventDefault();
+    buttonSubmitChangeAvatar.textContent = 'Сохранение...';
+    api.renewProfileAvatar(profileAvatarSrc.value)
+      .then((profile) =>{
+        profileAvatar.src = profile.avatar;
+        this.closePopup();
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        buttonSubmitChangeAvatar.textContent = 'Сохранено';
+      })
+  }
+});
 popupTypeProfileAvatar.setEventListeners();
 
 /*Открытие окна формы Редактировать профиль*/
