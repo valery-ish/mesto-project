@@ -92,6 +92,3 @@ export const api = new Api({
     'Content-Type': 'application/json'
   }
 });
-
-// https://dev.to/stroemdev/make-fetch-better-and-your-api-request-methods-easier-to-implement-e9i,
-  // https://codeburst.io/how-to-call-api-in-a-smart-way-2ca572c6fe86
