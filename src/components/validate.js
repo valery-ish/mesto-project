@@ -1,4 +1,4 @@
-class FormValidator{
+export default class FormValidator{
   constructor(config = {}, form) {
     this.formSelector = config.formSelector;
     this.inputSelector = config.inputSelector;
@@ -71,12 +71,3 @@ class FormValidator{
   }
 
 };
-
-export const formValidator = new FormValidator({
-  formSelector: '.modal',
-  inputSelector: '.modal__item',
-  submitButtonSelector: '.modal__save-btn',
-  inactiveButtonClass: 'modal__save-btn_inactive',
-  inputErrorClass: 'modal__item_type_error',
-  errorClass: 'modal__item-error_active'
-}, '.popup');
