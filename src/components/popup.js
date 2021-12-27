@@ -3,15 +3,7 @@ import {
   profileDescription,
   profileTitleValue,
   profileDescriptionValue,
-  buttonSubmitChangeProfile,
-  buttonSubmitChangeAvatar,
-  profileAvatar,
-  profileAvatarSrc,
-  buttonSubmitAddCard,
-  cardTitle,
-  cardLink
 } from './constants.js';
-import {api} from './api.js';
 
 export default class Popup {
   constructor(selector) {
@@ -61,26 +53,15 @@ export default class PopupWithImage extends Popup {
 }
 
 export default class PopupWithForm extends Popup {
-  constructor(selector) {
+  constructor({selector, handleButtonClick}) {
     super(selector);
+    this._handleButtonClick = handleButtonClick;
+    this._popuptype = selector.popuptype;
   }
 
     getInputValues() {
       profileTitleValue.value = profileTitle.textContent;
       profileDescriptionValue.value = profileDescription.textContent;
-    }
-
-    setEventListeners() {
-      super.setEventListeners();
-      this.selector.addEventListener('submit', () => {
-        // this.renderer
-      });
-    }
-
-    closePopup() {
-      this._getInputValues();
-      super.closePopup();
-      this._resetModal();
     }
 
     _resetModal() {
@@ -91,58 +72,16 @@ export default class PopupWithForm extends Popup {
       this.selector.querySelector('.modal').autocomplete = 'off';
     }
 
-    profileChangeHandler(evt) {
-      evt.preventDefault();
-      buttonSubmitChangeProfile.textContent = 'Сохранение...';
-      api.renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
-        .then((profile) =>{
-          profileTitle.textContent = profile.name;
-          profileDescription.textContent = profile.about;
-          this.closePopup();
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-        .finally(() => {
-          buttonSubmitChangeProfile.textContent = 'Сохранено';
-        })
-    };
+    setEventListeners() {
+      super.setEventListeners();
+      this.selector.addEventListener('submit', () => {
+        this._handleButtonClick = this._popuptype
+      });
+      this.offAutocomplete();
+    }
 
-    profileAvatarChangeHandler(evt) {
-      evt.preventDefault();
-      buttonSubmitChangeAvatar.textContent = 'Сохранение...';
-      api.renewProfileAvatar(profileAvatarSrc.value)
-        .then((profile) =>{
-          profileAvatar.src = profile.avatar;
-          this.closePopup();
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-        .finally(() => {
-          buttonSubmitChangeAvatar.textContent = 'Сохранено';
-        })
-    };
-
-    cardSubmitHandler (evt) {
-      evt.preventDefault();
-      buttonSubmitAddCard.textContent = 'Сохранение...';
-      api.postNewCard(cardTitle.value, cardLink.value)
-      .then((card) =>{
-        // cardsSection.prepend(createCard(card, userId));
-        this.closePopup();
-        this._resetModal();
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        buttonSubmitAddCard.textContent = 'Сохранено';
-      })
+    closePopup() {
+      super.closePopup();
+      this._resetModal();
     }
 }
-
-/*Событие на изменение профиля и добавление карточки*/
-// document.querySelector('#card-add').addEventListener('submit', cardSubmitHandler);
-// document.querySelector('#profile-change').addEventListener('submit', profileChangeHandler);
-// document.querySelector('#profile-avatar').addEventListener('submit', profileAvatarChangeHandler);
