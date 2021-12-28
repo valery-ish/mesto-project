@@ -75,40 +75,33 @@ import {
 
 
 export default class Card {
-    constructor(data, selector) {
-        this._selector = selector;
-        this._title = data.title;
-        this._description = data.description;
-        this._price = data.price;
-        this._image = data.image;
-    }
+  constructor(data, selector) {
+    this._selector = selector;
+    this._title = data.title;
+    this._link = data.link;
+    this._likes = data.likes;
+  }
 
-    _getElement() {
-        const cardElement = document
-            .querySelector(this._selector)
-            .content
-            .querySelector('.card_template')
-            .cloneNode(true);
-        return cardElement;
-    }
+ _getElement() {
+    const cardElement = document
+      .querySelector(this._selector)
+      .content
+      .querySelector('.card')
+      .cloneNode(true);
+    return cardElement;
+  }
 
-    generate() {
-        this._element = this._getElement();
-        this._setEventListeners();
-        this._element.querySelector('.card__image').style.backgroundImage = `url(${this._image})`;
-        this._element.querySelector('.card__title').textContent = this._title;
-        return this._element;
-    }
+ generate() {
+    this._element = this._getElement();
+    // this._setEventListeners();
+    this._element.querySelector('.card__image').src = this._link;
+    this._element.querySelector('.card__image').alt = this._link;
+    this._element.querySelector('.card__title').textContent = this._title;
+    this._element.querySelector('.card__btn').textContent = this._likes.length;
+    return this._element;
+  }
 }
 
-// const card = new Section({
-//     data: items,
-//     renderer: (item) => {
-//         const card = new Card(item, '.card');
-//         const cardElement = card.generate();
-//         card.setItem(cardElement);
-//     }
-// }, cardListSelector);
 
 const popupTypeConfirmDelete = new PopupWithForm ({
   selector: confirmDeletePopup,
