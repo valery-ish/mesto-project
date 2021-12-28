@@ -34,6 +34,7 @@ getInfo.then(([cards, profile]) =>{
   const userInfo = new UserInfo(profile);
   userInfo.setUserInfo();
   userId = userInfo.getUserId();
+  console.log(cards)
 
   const cardList = new Section({
     data: cards,
