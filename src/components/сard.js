@@ -35,11 +35,6 @@ import {
 //   cardToDelete = evt.target.closest('.card');
 // }
 
-
-
-
-
-
 export default class Card {
     constructor(data, userId, selector) {
         this._userId = userId
@@ -123,6 +118,7 @@ export default class Card {
 
     _setEventListeners(likeBtn, cardElementDelete, img) {
         const popupWithImage = new PopupWithImage(imagePopup, '.modal__image', '.modal__figcaption');
+        popupWithImage.setEventListeners();
 
         likeBtn.addEventListener('click', () => {
             this._likeCard(likeBtn);
@@ -134,7 +130,6 @@ export default class Card {
 
         img.addEventListener('click', () => {
             popupWithImage.openPopup(img);
-            // popupWithImage.setEventListeners()
         });
     }
 }
@@ -153,30 +148,3 @@ const popupTypeConfirmDelete = new PopupWithForm({
     }
 });
 popupTypeConfirmDelete.setEventListeners();
-// /*Кнопка удалить карточку*/
-// function  handleDelete() {
-//   api.deleteCardApi(cardIDToDelete)
-//     .then(() => {
-//       // location.reload();
-//       cardToDelete.remove();
-//       closePopup(confirmDeletePopup);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }
-// confirmButtonDeletePopup.addEventListener('submit', handleDelete)
-
-
-
-
-//Нужно Добавить константу popup и popupImage
-
-
-
-
-
-//     this._element.querySelector('.popup__close-btn').addEventListener('click', () => {
-//         this._handleClosePopup();
-//     });
-// }

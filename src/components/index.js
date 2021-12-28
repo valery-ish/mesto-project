@@ -30,24 +30,24 @@ const buttonProfileAvatar = document.querySelector('.profile__avatar-container')
 let userId = '';
 
 const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
-getInfo.then(([cards, profile]) => {
-        const userInfo = new UserInfo(profile);
-        userInfo.setUserInfo();
-        userId = userInfo.getUserId();
+getInfo.then(([cards, profile]) =>{
+  const userInfo = new UserInfo(profile);
+  userInfo.setUserInfo();
+  userId = userInfo.getUserId();
 
-        const cardList = new Section({
-            data: cards,
-            renderer: (item) => {
-                const card = new Card(item, userId, '.card_template');
-                const cardElement = card.generate();
-                cardList.addItem(cardElement);
-            }
-        }, '.cards');
-        cardList.renderItems()
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+  const cardList = new Section({
+    data: cards,
+      renderer: (item) => {
+        const card = new Card(item, userId, '.card_template');
+        const cardElement = card.generate();
+        cardList.addItem(cardElement);
+      }
+    }, '.cards');
+    cardList.renderItems()
+  })
+  .catch((err) => {
+      console.log(err);
+  });
 
 /*Валидация*/
 const formValidator = new FormValidator({
@@ -71,7 +71,7 @@ const popupTypeProfile = new PopupWithForm({
             .then((profile) => {
                 profileTitle.textContent = profile.name;
                 profileDescription.textContent = profile.about;
-                this.closePopup();
+                popupTypeProfile.closePopup();
             })
             .catch((err) => {
                 console.log(err)
@@ -90,9 +90,19 @@ const popupTypeCardAdd = new PopupWithForm({
         buttonSubmitAddCard.textContent = 'Сохранение...';
         api.postNewCard(cardTitle.value, cardLink.value)
             .then((card) => {
-                // cardsSection.prepend(createCard(card, userId));
-                this.closePopup();
-                this._resetModal();
+              console.log(card)
+              // const newCard = new Section({
+              //   data: card,
+              //     renderer: (item) => {
+              //       const card = new Card(item, userId, '.card_template');
+              //       const cardElement = card.generate();
+              //       return cardElement;
+              //     }
+              //   }, '.cards');
+              //   newCard.addItem(cardElement)
+
+                popupTypeCardAdd.closePopup();
+                popupTypeCardAdd._resetModal();
             })
             .catch((err) => {
                 console.log(err);
@@ -112,7 +122,7 @@ const popupTypeProfileAvatar = new PopupWithForm({
         api.renewProfileAvatar(profileAvatarSrc.value)
             .then((profile) => {
                 profileAvatar.src = profile.avatar;
-                this.closePopup();
+                popupTypeProfileAvatar.closePopup();
             })
             .catch((err) => {
                 console.log(err)

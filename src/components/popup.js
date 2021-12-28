@@ -1,4 +1,3 @@
-import { threadId } from 'worker_threads';
 import {
     profileTitle,
     profileDescription,
@@ -13,12 +12,11 @@ export default class Popup {
 
     openPopup() {
         this.selector.classList.add('popup_opened');
-        document.addEventListener('keydown', this._handleEscClose);
+        document.addEventListener('keydown', () => {this._handleEscClose(event)});
     }
 
     closePopup() {
         this.selector.classList.remove('popup_opened');
-        document.removeEventListener('keydown', this._handleEscClose);
     }
 
     _handleEscClose(event) {
@@ -51,22 +49,12 @@ export class PopupWithImage extends Popup {
         currentImageModal.alt = evt.alt;
         currentIimageFigcaption.textContent = evt.alt;
     }
-
-    // setEventListeners() {
-    //     this.selector.addEventListener('click', (evt) => {
-    //         if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__close-btn')) {
-    //             this.closePopup()
-    //         }
-    //     })
-    // }
-
 }
 
 export class PopupWithForm extends Popup {
     constructor({ selector, handleButtonClick }) {
         super(selector);
         this._handleButtonClick = handleButtonClick;
-        this._popuptype = selector.popuptype;
     }
 
     getInputValues() {
@@ -82,16 +70,16 @@ export class PopupWithForm extends Popup {
         this.selector.querySelector('.modal').autocomplete = 'off';
     }
 
-    setEventListeners() {
-        super.setEventListeners();
-        this.selector.addEventListener('submit', () => {
-            this._handleButtonClick = this._popuptype
-        });
-        this.offAutocomplete();
+    closePopup() {
+      super.closePopup();
+      this._resetModal();
     }
 
-    closePopup() {
-        super.closePopup();
-        this._resetModal();
+    setEventListeners() {
+        super.setEventListeners();
+        this.selector.addEventListener('submit', (evt) => {
+            this._handleButtonClick(evt);
+        });
+        this.offAutocomplete();
     }
 }

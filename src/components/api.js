@@ -38,7 +38,7 @@ class Api {
   }
 
   postNewCard(cartTitle, cardlink) {
-    return fetch(this._baseURL + '/users/me', {
+    return fetch(this._baseURL + '/cards', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
