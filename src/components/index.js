@@ -90,7 +90,17 @@ const popupTypeCardAdd = new PopupWithForm({
         buttonSubmitAddCard.textContent = 'Сохранение...';
         api.postNewCard(cardTitle.value, cardLink.value)
             .then((card) => {
-                // cardsSection.prepend(createCard(card, userId));
+              console.log(card)
+              // const newCard = new Section({
+              //   data: card,
+              //     renderer: (item) => {
+              //       const card = new Card(item, userId, '.card_template');
+              //       const cardElement = card.generate();
+              //       return cardElement;
+              //     }
+              //   }, '.cards');
+              //   newCard.addItem(cardElement)
+
                 popupTypeCardAdd.closePopup();
                 popupTypeCardAdd._resetModal();
             })

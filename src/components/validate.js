@@ -52,15 +52,15 @@ export default class FormValidator {
         const inputList = Array.from(formElement.querySelectorAll(this.inputSelector));
         const buttonElement = formElement.querySelector(this.submitButtonSelector);
 
-        // inputList.forEach((inputElement) => {
-        //     inputElement.addEventListener('input', function() {
-        //         this._toggleButtonState(inputList, buttonElement);
-        //         this._checkInputValidity(formElement, inputElement);
-        //     })
-        //     if (inputElement.value !== '') {
-        //         this._checkInputValidity(formElement, inputElement);
-        //     }
-        // })
+        inputList.forEach((inputElement) => {
+            inputElement.addEventListener('input', () => {
+                this._toggleButtonState(inputList, buttonElement);
+                this._checkInputValidity(formElement, inputElement);
+            })
+            if (inputElement.value !== '') {
+                this._checkInputValidity(formElement, inputElement);
+            }
+        })
 
         this._toggleButtonState(inputList, buttonElement);
     };
