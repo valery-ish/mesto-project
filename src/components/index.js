@@ -1,7 +1,7 @@
 import '../assets/pages/index.css';
 import FormValidator from './validate.js';
 import Card from './сard.js';
-import {PopupWithForm, PopupWithImage} from './popup.js';
+import {PopupWithForm} from './popup.js';
 import {api} from './api.js';
 import Section from './section.js';
 import UserInfo from './userInfo.js';
@@ -22,28 +22,32 @@ import {
   cardLink
 } from './constants.js';
 
-// const cardsSection = document.querySelector('.cards');
-
 const buttonChangeProfile = document.querySelector('.profile__btn-change');
 const buttonAddCard = document.querySelector('.profile__btn-add');
 const buttonProfileAvatar = document.querySelector('.profile__avatar-container');
 
 // /*Создание стартовых карточек и данных профиля*/
-// let userId = '';
+let userId = '';
 
-// const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
-// getInfo.then(([cards, profile]) =>{
-//   userId = profile._id;
-//   profileTitle.textContent = profile.name;
-//   profileDescription.textContent = profile.about;
-//   profileAvatar.src = profile.avatar;
-//   Object.values(cards).forEach((card) => {
-//     cardsSection.append(createCard(card, userId));
-//   });
-// })
-// .catch((err) => {
-//   console.log(err);
-// });
+const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
+getInfo.then(([cards, profile]) =>{
+  const userInfo = new UserInfo(profile);
+  userInfo.setUserInfo();
+  userId = userInfo.getUserId();
+
+  const cardList = new Section({
+    data: cards,
+    renderer: (item) => {
+      const card = new Card(item, '.card_template');
+      const cardElement = card.generate();
+      cardList.addItem(cardElement);
+    }
+  }, '.cards');
+  cardList.renderItems()
+})
+.catch((err) => {
+  console.log(err);
+});
 
 /*Валидация*/
 const formValidator = new FormValidator({

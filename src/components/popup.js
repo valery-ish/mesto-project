@@ -2,7 +2,7 @@ import {
   profileTitle,
   profileDescription,
   profileTitleValue,
-  profileDescriptionValue,
+  profileDescriptionValue
 } from './constants.js';
 
 export default class Popup {
@@ -12,30 +12,30 @@ export default class Popup {
 
   openPopup() {
     this.selector.classList.add('popup_opened');
-    document.addEventListener('keydown', _handleEscClose);
+    document.addEventListener('keydown', this._handleEscClose);
   }
 
   closePopup() {
     this.selector.classList.remove('popup_opened');
-    document.removeEventListener('keydown', _handleEscClose);
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 
   _handleEscClose (event) {
     if(event.key === 'Escape') {
-      closePopup(document.querySelector('.popup_opened'));
+      this.closePopup();
     }
   }
 
   setEventListeners() {
     this.selector.addEventListener('click', (evt) => {
       if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__close-btn')) {
-        closePopup()
+        this.closePopup()
       }
     })
   }
 }
 
-export default class PopupWithImage extends Popup {
+export class PopupWithImage extends Popup {
   constructor(selector, imageModal, imageFigcaption) {
     super(selector);
     this.imageModal = imageModal;
@@ -52,7 +52,7 @@ export default class PopupWithImage extends Popup {
   }
 }
 
-export default class PopupWithForm extends Popup {
+export class PopupWithForm extends Popup {
   constructor({selector, handleButtonClick}) {
     super(selector);
     this._handleButtonClick = handleButtonClick;
