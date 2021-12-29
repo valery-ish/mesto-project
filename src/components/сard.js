@@ -43,7 +43,7 @@ export default class Card {
         this._link = data.link;
         this._likes = data.likes;
         this._cardId = data._id;
-        // this._likeBtn = selector.querySelector('.card__btn')
+        this._cardOwnerId = data.owner._id;
     }
 
     _getElement() {
@@ -63,18 +63,23 @@ export default class Card {
         this._element.querySelector('.card__title').textContent = this._title;
         this._likeBtn = this._element.querySelector('.card__btn')
         this._likeBtn.textContent = this._likes.length;
-        this._deleteBtn = this._element.querySelector('.card__delete-btn')
-        this._setEventListeners(this._likeBtn, this._deleteBtn, this._img);
+        this._deleteBtn = this._element.querySelector('.card__delete-btn');
+        this._setEventListeners(this._likeBtn, this._deleteBtn, this._img, this._element);
 
         if (this._checkLikeCard()) {
             this._likeBtn.classList.add('card__btn_active');
         }
+
+        this._checkDeleteCard(this._deleteBtn)
+
         return this._element;
+
     }
 
     _checkLikeCard() {
         return Object.values(this._likes).some(like => like._id === this._userId)
     }
+
 
     _likeCard(likeBtn) {
         if (!likeBtn.classList.contains('card__btn_active')) {
@@ -99,24 +104,14 @@ export default class Card {
 
     }
 
-    _checkDeleteCard() {
-        if (cardData.owner._id === userId) {
+    _checkDeleteCard(cardElementDelete) {
+        if (this._cardOwnerId === this._userId) {
             cardElementDelete.style.display = 'block';
             return Object.values(this._likes).some(like => like._id === this._userId)
         }
     }
 
-    // _handleOpenPopup(popupImage) {
-    //     popupImage.src = this._image;
-    //     openPopup(popupElement);
-    // }
-
-    // _handleClosePopup() {
-    //     popupImage.src = '';
-    //     openPopup(popupElement);
-    // }
-
-    _setEventListeners(likeBtn, cardElementDelete, img) {
+    _setEventListeners(likeBtn, cardElementDelete, img, card) {
         const popupWithImage = new PopupWithImage(imagePopup, '.modal__image', '.modal__figcaption');
         popupWithImage.setEventListeners();
 
@@ -125,26 +120,30 @@ export default class Card {
         });
 
         cardElementDelete.addEventListener('click', (evt) => {
-            popupTypeConfirmDelete.openPopup()
+            this._deletCard(card);
+
         });
 
         img.addEventListener('click', () => {
             popupWithImage.openPopup(img);
         });
     }
-}
 
-const popupTypeConfirmDelete = new PopupWithForm({
-    selector: confirmDeletePopup,
-    handleButtonClick: () => {
-        api.deleteCardApi(cardIDToDelete)
-            .then(() => {
-                cardToDelete.remove();
-                this.closePopup();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    _deletCard(card) {
+        const popupTypeConfirmDelete = new PopupWithForm({
+            selector: confirmDeletePopup,
+            handleButtonClick: () => {
+                api.deleteCardApi(this._cardId)
+                    .then(() => {
+                        card.remove();
+                        popupTypeConfirmDelete.closePopup();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        });
+        popupTypeConfirmDelete.openPopup()
+        popupTypeConfirmDelete.setEventListeners();
     }
-});
-popupTypeConfirmDelete.setEventListeners();
+}

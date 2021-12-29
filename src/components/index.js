@@ -27,24 +27,27 @@ import {
 let userId = '';
 
 const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
-getInfo.then(([cards, profile]) =>{
-  const userInfo = new UserInfo(profile);
-  userInfo.setUserInfo();
-  userId = userInfo.getUserId();
+getInfo.then(([cards, profile]) => {
+        const userInfo = new UserInfo(profile);
+        userInfo.setUserInfo();
+        userId = userInfo.getUserId();
+        // console.log(cards)
+        const cardList = new Section({
+            data: cards,
+            renderer: (item) => {
+                const card = new Card(item, userId, '.card_template');
 
-  const cardList = new Section({
-    data: cards,
-      renderer: (item) => {
-        const card = new Card(item, userId, '.card_template');
-        const cardElement = card.generate();
-        cardList.setItemList(cardElement);
-      }
-    }, cardSection);
-    cardList.renderItems()
-  })
-  .catch((err) => {
-      console.log(err);
-  });
+                const cardElement = card.generate();
+                cardList.setItemList(cardElement);
+
+
+            }
+        }, cardSection);
+        cardList.renderItems()
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
 /*Валидация*/
 const formValidator = new FormValidator({
@@ -72,7 +75,7 @@ const popupTypeProfile = new PopupWithForm({
                 console.log(err)
             })
             .finally(() => {
-              popupTypeProfile.handleResultBtnState();
+                popupTypeProfile.handleResultBtnState();
             })
     }
 });
@@ -83,20 +86,20 @@ const popupTypeCardAdd = new PopupWithForm({
     handleButtonClick: () => {
         api.postNewCard(cardTitle.value, cardLink.value)
             .then((card) => {
-              const newCard = new Card (card, userId, '.card_template');
-              const cardRenderer = new Section({
-                data: []
-              }, cardSection);
-              const cardElement = newCard.generate();
-              cardRenderer.addItem(cardElement);
-              popupTypeCardAdd.closePopup();
-              popupTypeCardAdd._resetModal();
+                const newCard = new Card(card, userId, '.card_template');
+                const cardRenderer = new Section({
+                    data: []
+                }, cardSection);
+                const cardElement = newCard.generate();
+                cardRenderer.addItem(cardElement);
+                popupTypeCardAdd.closePopup();
+                popupTypeCardAdd._resetModal();
             })
             .catch((err) => {
                 console.log(err);
             })
             .finally(() => {
-              popupTypeCardAdd.handleResultBtnState();
+                popupTypeCardAdd.handleResultBtnState();
             })
     }
 });
@@ -114,7 +117,7 @@ const popupTypeProfileAvatar = new PopupWithForm({
                 console.log(err)
             })
             .finally(() => {
-              popupTypeProfileAvatar.handleResultBtnState();
+                popupTypeProfileAvatar.handleResultBtnState();
             })
     }
 });
