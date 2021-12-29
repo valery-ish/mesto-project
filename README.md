@@ -14,5 +14,13 @@ Flexbox, Grid
 - увеличение фото;
 - лайки;
 
+3. Cсылка на github участников:
+Литовченко Руслан - https://github.com/Rusflipz,
+Валерия Калмыкова - https://github.com/valery-kalmykova.
+
+4. Почта участников:
+Литовченко Руслан - rusflipz@yandex.ru,
+Валерия Калмыкова - valery-ish@yandex.ru.
+
 **Githab page**
 - https://valery-kalmykova.github.io/mesto-project/
