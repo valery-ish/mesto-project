@@ -2,7 +2,8 @@ import {
     profileTitle,
     profileDescription,
     profileTitleValue,
-    profileDescriptionValue
+    profileDescriptionValue,
+    buttonSubmit
 } from './constants.js';
 
 export default class Popup {
@@ -12,7 +13,6 @@ export default class Popup {
 
     openPopup() {
         this.selector.classList.add('popup_opened');
-        document.addEventListener('keydown', () => {this._handleEscClose(event)});
     }
 
     closePopup() {
@@ -31,6 +31,7 @@ export default class Popup {
                 this.closePopup()
             }
         })
+        document.addEventListener('keydown', () => {this._handleEscClose(event)});
     }
 }
 
@@ -54,7 +55,7 @@ export class PopupWithImage extends Popup {
 export class PopupWithForm extends Popup {
     constructor({ selector, handleButtonClick }) {
         super(selector);
-        this._handleButtonClick = handleButtonClick;
+        this._handleButtonClick = handleButtonClick
     }
 
     getInputValues() {
@@ -66,7 +67,7 @@ export class PopupWithForm extends Popup {
         this.selector.querySelector('.modal').reset();
     }
 
-    offAutocomplete() {
+    _offAutocomplete() {
         this.selector.querySelector('.modal').autocomplete = 'off';
     }
 
@@ -75,11 +76,17 @@ export class PopupWithForm extends Popup {
       this._resetModal();
     }
 
+    handleResultBtnState() {
+      this.selector.querySelector(buttonSubmit).textContent = 'Сохранено';
+    }
+
     setEventListeners() {
         super.setEventListeners();
         this.selector.addEventListener('submit', (evt) => {
-            this._handleButtonClick(evt);
+            evt.preventDefault();
+            this.selector.querySelector(buttonSubmit).textContent = 'Сохранение...';
+            this._handleButtonClick(evt)
         });
-        this.offAutocomplete();
+        this._offAutocomplete();
     }
 }

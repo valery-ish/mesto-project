@@ -6,6 +6,7 @@ import { api } from './api.js';
 import Section from './section.js';
 import UserInfo from './userInfo.js';
 import {
+    cardSection,
     profilePopup,
     cardPopup,
     profileAvatarPopup,
@@ -13,18 +14,14 @@ import {
     profileDescription,
     profileTitleValue,
     profileDescriptionValue,
-    buttonSubmitChangeProfile,
-    buttonSubmitChangeAvatar,
     profileAvatar,
     profileAvatarSrc,
-    buttonSubmitAddCard,
     cardTitle,
-    cardLink
+    cardLink,
+    buttonChangeProfile,
+    buttonAddCard,
+    buttonProfileAvatar
 } from './constants.js';
-
-const buttonChangeProfile = document.querySelector('.profile__btn-change');
-const buttonAddCard = document.querySelector('.profile__btn-add');
-const buttonProfileAvatar = document.querySelector('.profile__avatar-container');
 
 // /*Создание стартовых карточек и данных профиля*/
 let userId = '';
@@ -40,9 +37,9 @@ getInfo.then(([cards, profile]) =>{
       renderer: (item) => {
         const card = new Card(item, userId, '.card_template');
         const cardElement = card.generate();
-        cardList.addItem(cardElement);
+        cardList.setItemList(cardElement);
       }
-    }, '.cards');
+    }, cardSection);
     cardList.renderItems()
   })
   .catch((err) => {
@@ -64,9 +61,7 @@ formValidator.enableValidation();
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
     selector: profilePopup,
-    handleButtonClick: (evt) => {
-        evt.preventDefault();
-        buttonSubmitChangeProfile.textContent = 'Сохранение...';
+    handleButtonClick: () => {
         api.renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
             .then((profile) => {
                 profileTitle.textContent = profile.name;
@@ -77,7 +72,7 @@ const popupTypeProfile = new PopupWithForm({
                 console.log(err)
             })
             .finally(() => {
-                buttonSubmitChangeProfile.textContent = 'Сохранено';
+              popupTypeProfile.handleResultBtnState();
             })
     }
 });
@@ -85,30 +80,23 @@ popupTypeProfile.setEventListeners();
 
 const popupTypeCardAdd = new PopupWithForm({
     selector: cardPopup,
-    handleButtonClick: (evt) => {
-        evt.preventDefault();
-        buttonSubmitAddCard.textContent = 'Сохранение...';
+    handleButtonClick: () => {
         api.postNewCard(cardTitle.value, cardLink.value)
             .then((card) => {
-              console.log(card)
-              // const newCard = new Section({
-              //   data: card,
-              //     renderer: (item) => {
-              //       const card = new Card(item, userId, '.card_template');
-              //       const cardElement = card.generate();
-              //       return cardElement;
-              //     }
-              //   }, '.cards');
-              //   newCard.addItem(cardElement)
-
-                popupTypeCardAdd.closePopup();
-                popupTypeCardAdd._resetModal();
+              const newCard = new Card (card, userId, '.card_template');
+              const cardRenderer = new Section({
+                data: []
+              }, cardSection);
+              const cardElement = newCard.generate();
+              cardRenderer.addItem(cardElement);
+              popupTypeCardAdd.closePopup();
+              popupTypeCardAdd._resetModal();
             })
             .catch((err) => {
                 console.log(err);
             })
             .finally(() => {
-                buttonSubmitAddCard.textContent = 'Сохранено';
+              popupTypeCardAdd.handleResultBtnState();
             })
     }
 });
@@ -116,9 +104,7 @@ popupTypeCardAdd.setEventListeners();
 
 const popupTypeProfileAvatar = new PopupWithForm({
     selector: profileAvatarPopup,
-    handleButtonClick: (evt) => {
-        evt.preventDefault();
-        buttonSubmitChangeAvatar.textContent = 'Сохранение...';
+    handleButtonClick: () => {
         api.renewProfileAvatar(profileAvatarSrc.value)
             .then((profile) => {
                 profileAvatar.src = profile.avatar;
@@ -128,7 +114,7 @@ const popupTypeProfileAvatar = new PopupWithForm({
                 console.log(err)
             })
             .finally(() => {
-                buttonSubmitChangeAvatar.textContent = 'Сохранено';
+              popupTypeProfileAvatar.handleResultBtnState();
             })
     }
 });
