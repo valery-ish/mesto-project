@@ -1,39 +1,10 @@
-import { api } from './api.js';
-import { PopupWithImage, PopupWithForm } from './popup.js';
+import { api } from './Api.js';
+import PopupWithImage from './PopupWithImage.js';
+import PopupWithForm from './PopupWithForm.js';
 import {
     confirmDeletePopup,
     imagePopup
-} from './constants.js';
-
-// let cardIDToDelete = '';
-// let cardToDelete = '';
-
-// /*Функция создания новой карточки*/
-// export const createCard = (cardData, userId) => {
-//   const cardTemplate = document.querySelector('.card_template').content;
-//   const cardElement = cardTemplate.cloneNode(true);
-//   const cardElementImage = cardElement.querySelector('.card__image');
-//   const cardElementLike = cardElement.querySelector('.card__btn');
-//   const cardElementDelete = cardElement.querySelector('.card__delete-btn')
-
-//   cardElementImage.src = cardData.link;
-//   cardElementImage.alt = cardData.name;
-//   cardElement.querySelector('.card__title').textContent = cardData.name;
-
-
-
-//   /*проверка кнопки удалить*/
-
-
-//   cardElementImage.addEventListener('click', openImageCard);
-//   return cardElement;
-// };
-
-// function openConfirmDeletePopup (evt, cardData) {
-//   openPopup(confirmDeletePopup);
-//   cardIDToDelete = cardData._id;
-//   cardToDelete = evt.target.closest('.card');
-// }
+} from '../utils/constants.js';
 
 export default class Card {
     constructor(data, userId, selector) {

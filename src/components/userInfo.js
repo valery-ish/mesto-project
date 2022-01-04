@@ -2,7 +2,7 @@ import{
   profileTitle,
   profileDescription,
   profileAvatar,
-} from './constants.js';
+} from '../utils/constants.js';
 
 export default class UserInfo {
   constructor(profile) {

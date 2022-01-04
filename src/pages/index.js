@@ -1,10 +1,10 @@
-import '../assets/pages/index.css';
-import FormValidator from './validate.js';
-import Card from './сard.js';
-import { PopupWithForm } from './popup.js';
-import { api } from './api.js';
-import Section from './section.js';
-import UserInfo from './userInfo.js';
+import './index.css';
+import FormValidator from '../components/FormValidator.js';
+import Card from '../components/Card.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import { api } from '../components/Api.js';
+import Section from '../components/Section.js';
+import UserInfo from '../components/UserInfo.js';
 import {
     cardSection,
     profilePopup,
@@ -21,7 +21,7 @@ import {
     buttonChangeProfile,
     buttonAddCard,
     buttonProfileAvatar
-} from './constants.js';
+} from '../utils/constants.js';
 
 // /*Создание стартовых карточек и данных профиля*/
 let userId = '';
