@@ -26,10 +26,9 @@ let userId = '';
 
 const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
 getInfo.then(([cards, profile]) => {
-        const userInfo = new UserInfo(profile);
+        const userInfo = new UserInfo(profile, profileTitle, profileDescription, profileAvatar);
         userInfo.setUserInfo();
         userId = userInfo.getUserId();
-        // console.log(cards)
         const cardList = new Section({
             data: cards,
             renderer: (item) => {
@@ -59,8 +58,8 @@ formValidator.enableValidation();
 
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
-  popupSelector: profilePopup,
-  handleSubmit: (formData) => {
+    popupSelector: profilePopup,
+    handleSubmit: (formData) => {
         api.renewProfileInfo(formData['profile-title'], formData['profile-description'])
             .then((profile) => {
                 profileTitle.textContent = profile.name;
@@ -78,8 +77,8 @@ const popupTypeProfile = new PopupWithForm({
 popupTypeProfile.setEventListeners();
 
 const popupTypeCardAdd = new PopupWithForm({
-  popupSelector: cardPopup,
-  handleSubmit: (formData) => {
+    popupSelector: cardPopup,
+    handleSubmit: (formData) => {
         api.postNewCard(formData['card-title'], formData['card-link'])
             .then((card) => {
                 const newCard = new Card(card, userId, '.card_template');
@@ -101,8 +100,8 @@ const popupTypeCardAdd = new PopupWithForm({
 popupTypeCardAdd.setEventListeners();
 
 const popupTypeProfileAvatar = new PopupWithForm({
-  popupSelector: profileAvatarPopup,
-  handleSubmit: (formData) => {
+    popupSelector: profileAvatarPopup,
+    handleSubmit: (formData) => {
         api.renewProfileAvatar(formData['profile-avatar-link'])
             .then((profile) => {
                 profileAvatar.src = profile.avatar;
@@ -122,17 +121,17 @@ const popupWithImage = new PopupWithImage(imagePopup, '.modal__image', '.modal__
 popupWithImage.setEventListeners();
 
 const popupTypeConfirmDelete = new PopupWithForm({
-  popupSelector: confirmDeletePopup,
-  handleSubmit: () => {
-      api.deleteCardApi(this._cardId)
-          .then(() => {
-              // card.remove();
-              popupTypeConfirmDelete.closePopup();
-          })
-          .catch((err) => {
-              console.log(err);
-          });
-  }
+    popupSelector: confirmDeletePopup,
+    handleSubmit: () => {
+        api.deleteCardApi(this._cardId)
+            .then(() => {
+                // card.remove();
+                popupTypeConfirmDelete.closePopup();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 });
 popupTypeConfirmDelete.setEventListeners();
 
