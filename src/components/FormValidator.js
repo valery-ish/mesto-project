@@ -9,10 +9,10 @@ export default class FormValidator {
         this.errorClass = config.errorClass;
     }
 
-    _showInputError(inputElement) {
+    _showInputError(inputElement, errorMessage) {
         const errorElement = this.formSelector.querySelector(`.${inputElement.id}-error`);
         inputElement.classList.add(this.inputErrorClass);
-        errorElement.textContent = this.errorMessage;
+        errorElement.textContent = errorMessage;
         errorElement.classList.add(this.errorClass);
         console.log()
     };
