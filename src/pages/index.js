@@ -15,18 +15,10 @@ import {
     confirmDeletePopup,
     profileTitle,
     profileDescription,
-    profileTitleValue,
-    profileDescriptionValue,
     profileAvatar,
-    profileAvatarSrc,
-    cardTitle,
-    cardLink,
     buttonChangeProfile,
     buttonAddCard,
-    buttonProfileAvatar,
-    buttonSubmit,
-    inputSelector,
-    formSelector,
+    buttonProfileAvatar
 } from '../utils/constants.js';
 
 // /*Создание стартовых карточек и данных профиля*/
@@ -55,24 +47,21 @@ getInfo.then(([cards, profile]) => {
 
 /*Валидация*/
 const formValidator = new FormValidator({
-    formSelector: formSelector,
-    inputSelector: inputSelector,
-    submitButtonSelector: buttonSubmit,
+    formSelector: '.modal',
+    inputSelector: '.modal__item',
+    submitButtonSelector: '.modal__save-btn',
     inactiveButtonClass: 'modal__save-btn_inactive',
     inputErrorClass: 'modal__item_type_error',
     errorClass: 'modal__item-error_active'
-}, '.popup');
+}, '.popup_type_profile');
 
 formValidator.enableValidation();
 
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
   popupSelector: profilePopup,
-  inputSelector: inputSelector,
-  formSelector: formSelector,
-  submitButtonSelector: buttonSubmit,
-  handleSubmit: () => {
-        api.renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
+  handleSubmit: (formData) => {
+        api.renewProfileInfo(formData['profile-title'], formData['profile-description'])
             .then((profile) => {
                 profileTitle.textContent = profile.name;
                 profileDescription.textContent = profile.about;
@@ -90,11 +79,8 @@ popupTypeProfile.setEventListeners();
 
 const popupTypeCardAdd = new PopupWithForm({
   popupSelector: cardPopup,
-  inputSelector: inputSelector,
-  formSelector: formSelector,
-  submitButtonSelector: buttonSubmit,
-  handleSubmit: () => {
-        api.postNewCard(cardTitle.value, cardLink.value)
+  handleSubmit: (formData) => {
+        api.postNewCard(formData['card-title'], formData['card-link'])
             .then((card) => {
                 const newCard = new Card(card, userId, '.card_template');
                 const cardRenderer = new Section({
@@ -116,11 +102,8 @@ popupTypeCardAdd.setEventListeners();
 
 const popupTypeProfileAvatar = new PopupWithForm({
   popupSelector: profileAvatarPopup,
-  inputSelector: inputSelector,
-  formSelector: formSelector,
-  submitButtonSelector: buttonSubmit,
-  handleSubmit: () => {
-        api.renewProfileAvatar(profileAvatarSrc.value)
+  handleSubmit: (formData) => {
+        api.renewProfileAvatar(formData['profile-avatar-link'])
             .then((profile) => {
                 profileAvatar.src = profile.avatar;
                 popupTypeProfileAvatar.closePopup();
@@ -140,9 +123,6 @@ popupWithImage.setEventListeners();
 
 const popupTypeConfirmDelete = new PopupWithForm({
   popupSelector: confirmDeletePopup,
-  inputSelector: inputSelector,
-  formSelector: formSelector,
-  submitButtonSelector: buttonSubmit,
   handleSubmit: () => {
       api.deleteCardApi(this._cardId)
           .then(() => {
