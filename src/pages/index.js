@@ -1,27 +1,25 @@
-import '../assets/pages/index.css';
-import FormValidator from './validate.js';
-import Card from './сard.js';
-import { PopupWithForm } from './popup.js';
-import { api } from './api.js';
-import Section from './section.js';
-import UserInfo from './userInfo.js';
+import './index.css';
+import FormValidator from '../components/FormValidator.js';
+import Card from '../components/Card.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import { api } from '../components/Api.js';
+import Section from '../components/Section.js';
+import UserInfo from '../components/UserInfo.js';
 import {
     cardSection,
     profilePopup,
     cardPopup,
     profileAvatarPopup,
+    imagePopup,
+    confirmDeletePopup,
     profileTitle,
     profileDescription,
-    profileTitleValue,
-    profileDescriptionValue,
     profileAvatar,
-    profileAvatarSrc,
-    cardTitle,
-    cardLink,
     buttonChangeProfile,
     buttonAddCard,
     buttonProfileAvatar
-} from './constants.js';
+} from '../utils/constants.js';
 
 // /*Создание стартовых карточек и данных профиля*/
 let userId = '';
@@ -39,8 +37,6 @@ getInfo.then(([cards, profile]) => {
 
                 const cardElement = card.generate();
                 cardList.setItemList(cardElement);
-
-
             }
         }, cardSection);
         cardList.renderItems()
@@ -57,15 +53,15 @@ const formValidator = new FormValidator({
     inactiveButtonClass: 'modal__save-btn_inactive',
     inputErrorClass: 'modal__item_type_error',
     errorClass: 'modal__item-error_active'
-}, '.popup');
+}, '.popup_type_profile');
 
 formValidator.enableValidation();
 
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
-    selector: profilePopup,
-    handleButtonClick: () => {
-        api.renewProfileInfo(profileTitleValue.value, profileDescriptionValue.value)
+  popupSelector: profilePopup,
+  handleSubmit: (formData) => {
+        api.renewProfileInfo(formData['profile-title'], formData['profile-description'])
             .then((profile) => {
                 profileTitle.textContent = profile.name;
                 profileDescription.textContent = profile.about;
@@ -82,9 +78,9 @@ const popupTypeProfile = new PopupWithForm({
 popupTypeProfile.setEventListeners();
 
 const popupTypeCardAdd = new PopupWithForm({
-    selector: cardPopup,
-    handleButtonClick: () => {
-        api.postNewCard(cardTitle.value, cardLink.value)
+  popupSelector: cardPopup,
+  handleSubmit: (formData) => {
+        api.postNewCard(formData['card-title'], formData['card-link'])
             .then((card) => {
                 const newCard = new Card(card, userId, '.card_template');
                 const cardRenderer = new Section({
@@ -93,7 +89,6 @@ const popupTypeCardAdd = new PopupWithForm({
                 const cardElement = newCard.generate();
                 cardRenderer.addItem(cardElement);
                 popupTypeCardAdd.closePopup();
-                popupTypeCardAdd._resetModal();
             })
             .catch((err) => {
                 console.log(err);
@@ -106,9 +101,9 @@ const popupTypeCardAdd = new PopupWithForm({
 popupTypeCardAdd.setEventListeners();
 
 const popupTypeProfileAvatar = new PopupWithForm({
-    selector: profileAvatarPopup,
-    handleButtonClick: () => {
-        api.renewProfileAvatar(profileAvatarSrc.value)
+  popupSelector: profileAvatarPopup,
+  handleSubmit: (formData) => {
+        api.renewProfileAvatar(formData['profile-avatar-link'])
             .then((profile) => {
                 profileAvatar.src = profile.avatar;
                 popupTypeProfileAvatar.closePopup();
@@ -123,10 +118,27 @@ const popupTypeProfileAvatar = new PopupWithForm({
 });
 popupTypeProfileAvatar.setEventListeners();
 
+const popupWithImage = new PopupWithImage(imagePopup, '.modal__image', '.modal__figcaption');
+popupWithImage.setEventListeners();
+
+const popupTypeConfirmDelete = new PopupWithForm({
+  popupSelector: confirmDeletePopup,
+  handleSubmit: () => {
+      api.deleteCardApi(this._cardId)
+          .then(() => {
+              // card.remove();
+              popupTypeConfirmDelete.closePopup();
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+  }
+});
+popupTypeConfirmDelete.setEventListeners();
+
 /*Открытие окна формы Редактировать профиль*/
 buttonChangeProfile.addEventListener('click', function() {
     popupTypeProfile.openPopup();
-    popupTypeProfile.getInputValues();
 });
 
 /*Открытие окна формы Добавить новое место*/
