@@ -35,13 +35,42 @@ getInfo.then(([cards, profile]) => {
         const cardList = new Section({
             data: cards,
             renderer: (item) => {
-                const card = new Card(item, userId, '.card_template');
+                const card = new Card({
+                  data: item,
+                  userId: userId,
+                  selector: '.card_template',
+                  putLikeCardRender: (likeBtn) => {
+                    api.putLikeCard(item._id)
+                      .then((card) => {
+                        likeBtn.textContent = card.likes.length;
+                        likeBtn.classList.add('card__btn_active');
+                      })
+                      .catch((err) => {
+                          console.log(err);
+                      });
+                  },
+                  deleteLikeCardRender: (likeBtn) => {
+                    api.deleteLikeCard(item._id)
+                      .then((card) => {
+                        likeBtn.textContent = card.likes.length;
+                        likeBtn.classList.remove('card__btn_active');
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  },
+                  openImage: (title, link) => {
+                    popupWithImage.openPopup(title, link)
+                  },
+                  deleteCard: () => {
 
+                  },
+                });
                 const cardElement = card.generate();
                 cardList.setItemList(cardElement);
             }
         }, cardSection);
-        cardList.renderItems()
+        cardList.renderItems();
     })
     .catch((err) => {
         console.log(err);
@@ -166,3 +195,5 @@ buttonAddCard.addEventListener('click', function() {
 buttonProfileAvatar.addEventListener('click', function() {
     popupTypeProfileAvatar.openPopup();
 });
+
+
