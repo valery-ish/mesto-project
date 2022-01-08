@@ -1,7 +1,5 @@
-import { api } from './Api.js';
-
 export default class Card {
-    constructor(data, userId, selector) {
+    constructor({data, userId, selector, putLikeCardRender, deleteLikeCardRender, openImage, deleteCard}) {
         this._userId = userId
         this._selector = selector;
         this._title = data.name;
@@ -9,6 +7,10 @@ export default class Card {
         this._likes = data.likes;
         this._cardId = data._id;
         this._cardOwnerId = data.owner._id;
+        this._putLikeCardRender = putLikeCardRender;
+        this._deleteLikeCardRender = deleteLikeCardRender;
+        this._openImage = openImage;
+        this._deleteCard = deleteCard;
     }
 
     _getElement() {
@@ -29,16 +31,12 @@ export default class Card {
         this._likeBtn = this._element.querySelector('.card__btn')
         this._likeBtn.textContent = this._likes.length;
         this._deleteBtn = this._element.querySelector('.card__delete-btn');
-        this._setEventListeners(this._likeBtn, this._deleteBtn, this._img, this._element);
-
         if (this._checkLikeCard()) {
             this._likeBtn.classList.add('card__btn_active');
         }
-
-        this._checkDeleteCard(this._deleteBtn)
-
+        this._checkDeleteCard()
+        this._setEventListeners();
         return this._element;
-
     }
 
     _checkLikeCard() {
@@ -46,71 +44,33 @@ export default class Card {
     }
 
 
-    _likeCard(likeBtn) {
-        if (!likeBtn.classList.contains('card__btn_active')) {
-            api.putLikeCard(this._cardId)
-                .then((card) => {
-                    likeBtn.textContent = card.likes.length;
-                    likeBtn.classList.add('card__btn_active');
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+    _likeCard() {
+        if (!this._likeBtn.classList.contains('card__btn_active')) {
+          this._putLikeCardRender(this._likeBtn);
         } else {
-            api.deleteLikeCard(this._cardId)
-                .then((card) => {
-                    likeBtn.textContent = card.likes.length;
-                    likeBtn.classList.remove('card__btn_active');
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+          this._deleteLikeCardRender(this._likeBtn);
         }
 
     }
 
-    _checkDeleteCard(cardElementDelete) {
+    _checkDeleteCard() {
         if (this._cardOwnerId === this._userId) {
-            cardElementDelete.style.display = 'block';
-            return Object.values(this._likes).some(like => like._id === this._userId)
+          this._deleteBtn.style.display = 'block';
+          return Object.values(this._likes).some(like => like._id === this._userId)
         }
     }
 
-    _setEventListeners(likeBtn, cardElementDelete, img, card) {
-        // const popupWithImage = new PopupWithImage(imagePopup, '.modal__image', '.modal__figcaption');
-        // popupWithImage.setEventListeners();
-        // по ревью объявлен в index.js.
-
-        likeBtn.addEventListener('click', () => {
-            this._likeCard(likeBtn);
+    _setEventListeners() {
+        this._likeBtn.addEventListener('click', () => {
+            this._likeCard();
         });
 
-        cardElementDelete.addEventListener('click', (evt) => {
-            this._deletCard(card);
-
+        this._deleteBtn.addEventListener('click', () => {
+            this._deleteCard();
         });
 
-        img.addEventListener('click', () => {
-            // popupWithImage.openPopup(img);
+        this._img.addEventListener('click', () => {
+            this._openImage(this._title, this._link);
         });
-    }
-
-    _deletCard(card) {
-        // const popupTypeConfirmDelete = new PopupWithForm({
-        //     selector: confirmDeletePopup,
-        //     handleButtonClick: () => {
-        //         api.deleteCardApi(this._cardId)
-        //             .then(() => {
-        //                 card.remove();
-        //                 popupTypeConfirmDelete.closePopup();
-        //             })
-        //             .catch((err) => {
-        //                 console.log(err);
-        //             });
-        //     }
-        // });
-        // popupTypeConfirmDelete.openPopup()
-        // popupTypeConfirmDelete.setEventListeners();
-        // по ревью объявлен в index.js.
     }
 }

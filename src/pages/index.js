@@ -18,7 +18,10 @@ import {
     profileAvatar,
     buttonChangeProfile,
     buttonAddCard,
-    buttonProfileAvatar
+    buttonProfileAvatar,
+    profileForm,
+    addCardForm,
+    profileAvatarForm
 } from '../utils/constants.js';
 
 // /*Создание стартовых карточек и данных профиля*/
@@ -32,29 +35,72 @@ getInfo.then(([cards, profile]) => {
         const cardList = new Section({
             data: cards,
             renderer: (item) => {
-                const card = new Card(item, userId, '.card_template');
+                const card = new Card({
+                  data: item,
+                  userId: userId,
+                  selector: '.card_template',
+                  putLikeCardRender: (likeBtn) => {
+                    api.putLikeCard(item._id)
+                      .then((card) => {
+                        likeBtn.textContent = card.likes.length;
+                        likeBtn.classList.add('card__btn_active');
+                      })
+                      .catch((err) => {
+                          console.log(err);
+                      });
+                  },
+                  deleteLikeCardRender: (likeBtn) => {
+                    api.deleteLikeCard(item._id)
+                      .then((card) => {
+                        likeBtn.textContent = card.likes.length;
+                        likeBtn.classList.remove('card__btn_active');
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  },
+                  openImage: (title, link) => {
+                    popupWithImage.openPopup(title, link)
+                  },
+                  deleteCard: () => {
 
+                  },
+                });
                 const cardElement = card.generate();
                 cardList.setItemList(cardElement);
             }
         }, cardSection);
-        cardList.renderItems()
+        cardList.renderItems();
     })
     .catch((err) => {
         console.log(err);
     });
 
 /*Валидация*/
-const formValidator = new FormValidator({
-    formSelector: '.modal',
-    inputSelector: '.modal__item',
-    submitButtonSelector: '.modal__save-btn',
-    inactiveButtonClass: 'modal__save-btn_inactive',
-    inputErrorClass: 'modal__item_type_error',
-    errorClass: 'modal__item-error_active'
-}, '.popup_type_profile');
+const formValidators = {}
 
-formValidator.enableValidation();
+const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector))
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(formElement, config);
+    const formName = formElement.getAttribute('name');
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  });
+};
+
+enableValidation({
+  formSelector: '.modal',
+  inputSelector: '.modal__item',
+  submitButtonSelector: '.modal__save-btn',
+  inactiveButtonClass: 'modal__save-btn_inactive',
+  inputErrorClass: 'modal__item_type_error',
+  errorClass: 'modal__item-error_active'
+});
+
+formValidators[ profileForm.getAttribute('name') ].resetValidation();
+formValidators[ addCardForm.getAttribute('name') ].resetValidation();
+formValidators[ profileAvatarForm.getAttribute('name') ].resetValidation();
 
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
@@ -149,3 +195,5 @@ buttonAddCard.addEventListener('click', function() {
 buttonProfileAvatar.addEventListener('click', function() {
     popupTypeProfileAvatar.openPopup();
 });
+
+
