@@ -18,7 +18,10 @@ import {
     profileAvatar,
     buttonChangeProfile,
     buttonAddCard,
-    buttonProfileAvatar
+    buttonProfileAvatar,
+    profileForm,
+    addCardForm,
+    profileAvatarForm
 } from '../utils/constants.js';
 
 // /*Создание стартовых карточек и данных профиля*/
@@ -45,16 +48,30 @@ getInfo.then(([cards, profile]) => {
     });
 
 /*Валидация*/
-const formValidator = new FormValidator({
-    formSelector: '.modal',
-    inputSelector: '.modal__item',
-    submitButtonSelector: '.modal__save-btn',
-    inactiveButtonClass: 'modal__save-btn_inactive',
-    inputErrorClass: 'modal__item_type_error',
-    errorClass: 'modal__item-error_active'
-}, '.popup_type_profile');
+const formValidators = {}
 
-formValidator.enableValidation();
+const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector))
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(formElement, config);
+    const formName = formElement.getAttribute('name');
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  });
+};
+
+enableValidation({
+  formSelector: '.modal',
+  inputSelector: '.modal__item',
+  submitButtonSelector: '.modal__save-btn',
+  inactiveButtonClass: 'modal__save-btn_inactive',
+  inputErrorClass: 'modal__item_type_error',
+  errorClass: 'modal__item-error_active'
+});
+
+formValidators[ profileForm.getAttribute('name') ].resetValidation();
+formValidators[ addCardForm.getAttribute('name') ].resetValidation();
+formValidators[ profileAvatarForm.getAttribute('name') ].resetValidation();
 
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
