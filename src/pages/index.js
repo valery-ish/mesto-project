@@ -27,44 +27,45 @@ import {
 // /*Создание стартовых карточек и данных профиля*/
 let userId = '';
 
+const userInfo = new UserInfo(profileTitle, profileDescription, profileAvatar);
+
 const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
 getInfo.then(([cards, profile]) => {
-        const userInfo = new UserInfo(profile, profileTitle, profileDescription, profileAvatar);
-        userInfo.setUserInfo();
-        userId = userInfo.getUserId();
+        userInfo.setUserInfo(profile);
+        userId = userInfo.getUserId(profile);
         const cardList = new Section({
             data: cards,
             renderer: (item) => {
                 const card = new Card({
-                  data: item,
-                  userId: userId,
-                  selector: '.card_template',
-                  putLikeCardRender: (likeBtn) => {
-                    api.putLikeCard(item._id)
-                      .then((card) => {
-                        likeBtn.textContent = card.likes.length;
-                        likeBtn.classList.add('card__btn_active');
-                      })
-                      .catch((err) => {
-                          console.log(err);
-                      });
-                  },
-                  deleteLikeCardRender: (likeBtn) => {
-                    api.deleteLikeCard(item._id)
-                      .then((card) => {
-                        likeBtn.textContent = card.likes.length;
-                        likeBtn.classList.remove('card__btn_active');
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  },
-                  openImage: (title, link) => {
-                    popupWithImage.openPopup(title, link)
-                  },
-                  deleteCard: () => {
+                    data: item,
+                    userId: userId,
+                    selector: '.card_template',
+                    putLikeCardRender: (likeBtn) => {
+                        api.putLikeCard(item._id)
+                            .then((card) => {
+                                likeBtn.textContent = card.likes.length;
+                                likeBtn.classList.add('card__btn_active');
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    },
+                    deleteLikeCardRender: (likeBtn) => {
+                        api.deleteLikeCard(item._id)
+                            .then((card) => {
+                                likeBtn.textContent = card.likes.length;
+                                likeBtn.classList.remove('card__btn_active');
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    },
+                    openImage: (title, link) => {
+                        popupWithImage.openPopup(title, link)
+                    },
+                    deleteCard: () => {
 
-                  },
+                    },
                 });
                 const cardElement = card.generate();
                 cardList.setItemList(cardElement);
@@ -80,27 +81,27 @@ getInfo.then(([cards, profile]) => {
 const formValidators = {}
 
 const enableValidation = (config) => {
-  const formList = Array.from(document.querySelectorAll(config.formSelector))
-  formList.forEach((formElement) => {
-    const validator = new FormValidator(formElement, config);
-    const formName = formElement.getAttribute('name');
-    formValidators[formName] = validator;
-    validator.enableValidation();
-  });
+    const formList = Array.from(document.querySelectorAll(config.formSelector))
+    formList.forEach((formElement) => {
+        const validator = new FormValidator(formElement, config);
+        const formName = formElement.getAttribute('name');
+        formValidators[formName] = validator;
+        validator.enableValidation();
+    });
 };
 
 enableValidation({
-  formSelector: '.modal',
-  inputSelector: '.modal__item',
-  submitButtonSelector: '.modal__save-btn',
-  inactiveButtonClass: 'modal__save-btn_inactive',
-  inputErrorClass: 'modal__item_type_error',
-  errorClass: 'modal__item-error_active'
+    formSelector: '.modal',
+    inputSelector: '.modal__item',
+    submitButtonSelector: '.modal__save-btn',
+    inactiveButtonClass: 'modal__save-btn_inactive',
+    inputErrorClass: 'modal__item_type_error',
+    errorClass: 'modal__item-error_active'
 });
 
-formValidators[ profileForm.getAttribute('name') ].resetValidation();
-formValidators[ addCardForm.getAttribute('name') ].resetValidation();
-formValidators[ profileAvatarForm.getAttribute('name') ].resetValidation();
+formValidators[profileForm.getAttribute('name')].resetValidation();
+formValidators[addCardForm.getAttribute('name')].resetValidation();
+formValidators[profileAvatarForm.getAttribute('name')].resetValidation();
 
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
@@ -183,7 +184,8 @@ popupTypeConfirmDelete.setEventListeners();
 
 /*Открытие окна формы Редактировать профиль*/
 buttonChangeProfile.addEventListener('click', function() {
-    popupTypeProfile.openPopup();
+    const data = userInfo.getUserInfo();
+    popupTypeProfile.openPopup(data);
 });
 
 /*Открытие окна формы Добавить новое место*/
@@ -197,3 +199,8 @@ buttonProfileAvatar.addEventListener('click', function() {
 });
 
 
+// function data() {
+//     const data = userInfo.getUserInfo();
+//     console.log(data);
+// }
+// data();
