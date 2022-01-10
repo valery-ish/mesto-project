@@ -38,15 +38,15 @@ export default class PopupWithForm extends Popup {
         this._resetModal();
     }
 
-    handleResultBtnState() {
-        this._buttonSubmit.textContent = 'Сохранено';
+    renderLoading (isLoading = 'Сохранить') {
+      this._buttonSubmit.textContent = isLoading;
     }
 
     setEventListeners() {
         super.setEventListeners();
         this.selector.addEventListener('submit', (evt) => {
             evt.preventDefault();
-            this._buttonSubmit.textContent = 'Сохранение...';
+            this.renderLoading('Сохранение...');
             this._handleSubmit(this._getInputValues())
         });
         this._offAutocomplete();

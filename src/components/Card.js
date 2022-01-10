@@ -65,8 +65,9 @@ export default class Card {
             this._likeCard();
         });
 
-        this._deleteBtn.addEventListener('click', () => {
-            this._deleteCard();
+        this._deleteBtn.addEventListener('click', (evt) => {
+            const cardTarget = evt.target.closest('.card');
+            this._deleteCard(this._cardId, cardTarget);
         });
 
         this._img.addEventListener('click', () => {
