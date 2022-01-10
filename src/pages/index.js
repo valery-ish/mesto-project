@@ -26,6 +26,8 @@ import {
 
 // /*Создание стартовых карточек и данных профиля*/
 let userId = '';
+let cardIdToDelete = '';
+let cardTargetToDelete = '';
 
 const userInfo = new UserInfo(profileTitle, profileDescription, profileAvatar);
 
@@ -63,8 +65,10 @@ getInfo.then(([cards, profile]) => {
                     openImage: (title, link) => {
                         popupWithImage.openPopup(title, link)
                     },
-                    deleteCard: () => {
-
+                    deleteCard: (cardId, cardTarget) => {
+                      cardIdToDelete = cardId;
+                      cardTargetToDelete = cardTarget;
+                      popupTypeConfirmDelete.openPopup()
                     },
                 });
                 const cardElement = card.generate();
@@ -117,7 +121,7 @@ const popupTypeProfile = new PopupWithForm({
                 console.log(err)
             })
             .finally(() => {
-                popupTypeProfile.handleResultBtnState();
+                popupTypeProfile.renderLoading();
             })
     }
 });
@@ -140,7 +144,7 @@ const popupTypeCardAdd = new PopupWithForm({
                 console.log(err);
             })
             .finally(() => {
-                popupTypeCardAdd.handleResultBtnState();
+                popupTypeCardAdd.renderLoading();
             })
     }
 });
@@ -158,7 +162,7 @@ const popupTypeProfileAvatar = new PopupWithForm({
                 console.log(err)
             })
             .finally(() => {
-                popupTypeProfileAvatar.handleResultBtnState();
+                popupTypeProfileAvatar.renderLoading();
             })
     }
 });
@@ -170,9 +174,9 @@ popupWithImage.setEventListeners();
 const popupTypeConfirmDelete = new PopupWithForm({
     popupSelector: confirmDeletePopup,
     handleSubmit: () => {
-        api.deleteCardApi(this._cardId)
+        api.deleteCardApi(cardIdToDelete)
             .then(() => {
-                // card.remove();
+                cardTargetToDelete.remove();
                 popupTypeConfirmDelete.closePopup();
             })
             .catch((err) => {
