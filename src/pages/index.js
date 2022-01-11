@@ -31,55 +31,54 @@ let cardTargetToDelete = '';
 
 const userInfo = new UserInfo(profileTitle, profileDescription, profileAvatar);
 
+const cardRender = new Section({
+    renderer: (item) => {
+        const cardElement = card.generate(item, userId);
+        cardRender.setItemList(cardElement);
+    }
+}, cardSection);
+
 const getInfo = Promise.all([api.getInitialCards(), api.getProfileInfo()])
 getInfo.then(([cards, profile]) => {
         userInfo.setUserInfo(profile);
         userId = userInfo.getUserId(profile);
-        const cardList = new Section({
-            data: cards,
-            renderer: (item) => {
-                const card = new Card({
-                    data: item,
-                    userId: userId,
-                    selector: '.card_template',
-                    putLikeCardRender: (likeBtn) => {
-                        api.putLikeCard(item._id)
-                            .then((card) => {
-                                likeBtn.textContent = card.likes.length;
-                                likeBtn.classList.add('card__btn_active');
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    },
-                    deleteLikeCardRender: (likeBtn) => {
-                        api.deleteLikeCard(item._id)
-                            .then((card) => {
-                                likeBtn.textContent = card.likes.length;
-                                likeBtn.classList.remove('card__btn_active');
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    },
-                    openImage: (title, link) => {
-                        popupWithImage.openPopup(title, link)
-                    },
-                    deleteCard: (cardId, cardTarget) => {
-                      cardIdToDelete = cardId;
-                      cardTargetToDelete = cardTarget;
-                      popupTypeConfirmDelete.openPopup()
-                    },
-                });
-                const cardElement = card.generate();
-                cardList.setItemList(cardElement);
-            }
-        }, cardSection);
-        cardList.renderItems();
+        cardRender.renderItems(cards);
     })
     .catch((err) => {
         console.log(err);
     });
+
+const card = new Card({
+    selector: '.card_template',
+    putLikeCardRender: (likeBtn, data) => {
+        api.putLikeCard(data._id)
+            .then((card) => {
+                likeBtn.textContent = card.likes.length;
+                likeBtn.classList.add('card__btn_active');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    },
+    deleteLikeCardRender: (likeBtn, data) => {
+        api.deleteLikeCard(data._id)
+            .then((card) => {
+                likeBtn.textContent = card.likes.length;
+                likeBtn.classList.remove('card__btn_active');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    },
+    openImage: (title, link) => {
+        popupWithImage.openPopup(title, link)
+    },
+    deleteCard: (cardId, cardTarget) => {
+        cardIdToDelete = cardId;
+        cardTargetToDelete = cardTarget;
+        popupTypeConfirmDelete.openPopup()
+    },
+});
 
 /*Валидация*/
 const formValidators = {}
@@ -131,13 +130,9 @@ const popupTypeCardAdd = new PopupWithForm({
     popupSelector: cardPopup,
     handleSubmit: (formData) => {
         api.postNewCard(formData['card-title'], formData['card-link'])
-            .then((card) => {
-                const newCard = new Card(card, userId, '.card_template');
-                const cardRenderer = new Section({
-                    data: []
-                }, cardSection);
-                const cardElement = newCard.generate();
-                cardRenderer.addItem(cardElement);
+            .then((item) => {
+                const cardElement = card.generate(item, userId);
+                cardRender.addItem(cardElement);
                 popupTypeCardAdd.closePopup();
             })
             .catch((err) => {
