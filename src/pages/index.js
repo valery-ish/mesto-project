@@ -119,6 +119,7 @@ const popupTypeProfile = new PopupWithForm({
             })
     }
 });
+
 popupTypeProfile.setEventListeners();
 
 const popupTypeCardAdd = new PopupWithForm({
@@ -173,7 +174,7 @@ const popupTypeConfirmDelete = new PopupWithForm({
                 console.log(err);
             })
             .finally(() => {
-              popupTypeConfirmDelete.renderLoading();
+                popupTypeConfirmDelete.renderLoading();
             })
     }
 });
@@ -182,8 +183,13 @@ popupTypeConfirmDelete.setEventListeners();
 /*Открытие окна формы Редактировать профиль*/
 buttonChangeProfile.addEventListener('click', function() {
     const data = userInfo.getUserInfo();
-    popupTypeProfile.openPopup(data);
+    const inputList = profileForm.querySelectorAll('.modal__item');
+    inputList[0].value = data.title;
+    inputList[1].value = data.description;
+    popupTypeProfile.openPopup();
     formValidators[profileForm.getAttribute('name')].resetValidation();
+    profileForm.querySelector('.modal__save-btn').classList.add('modal__save-btn_inactive');
+    profileForm.querySelector('.modal__save-btn').setAttribute("disabled", "disabled");
 });
 
 /*Открытие окна формы Добавить новое место*/
@@ -197,10 +203,3 @@ buttonProfileAvatar.addEventListener('click', function() {
     popupTypeProfileAvatar.openPopup();
     formValidators[profileAvatarForm.getAttribute('name')].resetValidation();
 });
-
-
-// function data() {
-//     const data = userInfo.getUserInfo();
-//     console.log(data);
-// }
-// data();

@@ -26,23 +26,13 @@ export default class PopupWithForm extends Popup {
         this._form.autocomplete = 'off';
     }
 
-    openPopup(data) {
-        super.openPopup();
-        if (this._selector === '.popup_type_profile') {
-            this._inputList[0].value = data.title;
-            this._inputList[1].value = data.description;
-        }
-    }
-
     closePopup() {
         super.closePopup();
         this._resetModal();
     }
 
-    renderLoading (isLoading, buttonText = 'Сохранить') {
-      if (!isLoading) {
+    renderLoading(buttonText = 'Сохранить') {
         this._buttonSubmit.textContent = buttonText;
-      }
     }
 
     setEventListeners() {
