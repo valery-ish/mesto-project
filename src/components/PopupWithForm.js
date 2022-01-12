@@ -1,12 +1,13 @@
 import Popup from './Popup.js'
 
 export default class PopupWithForm extends Popup {
-    constructor({ popupSelector, handleSubmit }) {
-        super(popupSelector);
-        this._popupSelector = popupSelector;
-        this._inputList = this.selector.querySelectorAll('.modal__item');
-        this._modal = this.selector.querySelector('.modal');
-        this._buttonSubmit = this.selector.querySelector('.modal__save-btn');
+    constructor({ selector, handleSubmit }) {
+        super(selector);
+        this._selector = selector;
+        this._popup = document.querySelector(selector)
+        this._inputList = this._popup.querySelectorAll('.modal__item');
+        this._form = this._popup.querySelector('.modal');
+        this._buttonSubmit = this._popup.querySelector('.modal__save-btn');
         this._handleSubmit = handleSubmit;
     }
 
@@ -18,16 +19,16 @@ export default class PopupWithForm extends Popup {
     }
 
     _resetModal() {
-        this._modal.reset();
+        this._form.reset();
     }
 
     _offAutocomplete() {
-        this._modal.autocomplete = 'off';
+        this._form.autocomplete = 'off';
     }
 
     openPopup(data) {
         super.openPopup();
-        if (this._popupSelector === '.popup_type_profile') {
+        if (this._selector === '.popup_type_profile') {
             this._inputList[0].value = data.title;
             this._inputList[1].value = data.description;
         }
@@ -38,13 +39,15 @@ export default class PopupWithForm extends Popup {
         this._resetModal();
     }
 
-    renderLoading (isLoading = 'Сохранить') {
-      this._buttonSubmit.textContent = isLoading;
+    renderLoading (isLoading, buttonText = 'Сохранить') {
+      if (!isLoading) {
+        this._buttonSubmit.textContent = buttonText;
+      }
     }
 
     setEventListeners() {
         super.setEventListeners();
-        this.selector.addEventListener('submit', (evt) => {
+        this._popup.addEventListener('submit', (evt) => {
             evt.preventDefault();
             this.renderLoading('Сохранение...');
             this._handleSubmit(this._getInputValues())

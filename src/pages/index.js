@@ -102,18 +102,13 @@ enableValidation({
     errorClass: 'modal__item-error_active'
 });
 
-formValidators[profileForm.getAttribute('name')].resetValidation();
-formValidators[addCardForm.getAttribute('name')].resetValidation();
-formValidators[profileAvatarForm.getAttribute('name')].resetValidation();
-
 /*Попапы*/
 const popupTypeProfile = new PopupWithForm({
-    popupSelector: profilePopup,
+    selector: profilePopup,
     handleSubmit: (formData) => {
         api.renewProfileInfo(formData['profile-title'], formData['profile-description'])
             .then((profile) => {
-                profileTitle.textContent = profile.name;
-                profileDescription.textContent = profile.about;
+                userInfo.setUserInfo(profile);
                 popupTypeProfile.closePopup();
             })
             .catch((err) => {
@@ -127,7 +122,7 @@ const popupTypeProfile = new PopupWithForm({
 popupTypeProfile.setEventListeners();
 
 const popupTypeCardAdd = new PopupWithForm({
-    popupSelector: cardPopup,
+    selector: cardPopup,
     handleSubmit: (formData) => {
         api.postNewCard(formData['card-title'], formData['card-link'])
             .then((item) => {
@@ -146,11 +141,11 @@ const popupTypeCardAdd = new PopupWithForm({
 popupTypeCardAdd.setEventListeners();
 
 const popupTypeProfileAvatar = new PopupWithForm({
-    popupSelector: profileAvatarPopup,
+    selector: profileAvatarPopup,
     handleSubmit: (formData) => {
         api.renewProfileAvatar(formData['profile-avatar-link'])
             .then((profile) => {
-                profileAvatar.src = profile.avatar;
+                userInfo.setUserInfo(profile);
                 popupTypeProfileAvatar.closePopup();
             })
             .catch((err) => {
@@ -167,7 +162,7 @@ const popupWithImage = new PopupWithImage(imagePopup, '.modal__image', '.modal__
 popupWithImage.setEventListeners();
 
 const popupTypeConfirmDelete = new PopupWithForm({
-    popupSelector: confirmDeletePopup,
+    selector: confirmDeletePopup,
     handleSubmit: () => {
         api.deleteCardApi(cardIdToDelete)
             .then(() => {
@@ -176,7 +171,10 @@ const popupTypeConfirmDelete = new PopupWithForm({
             })
             .catch((err) => {
                 console.log(err);
-            });
+            })
+            .finally(() => {
+              popupTypeConfirmDelete.renderLoading();
+            })
     }
 });
 popupTypeConfirmDelete.setEventListeners();
@@ -185,16 +183,19 @@ popupTypeConfirmDelete.setEventListeners();
 buttonChangeProfile.addEventListener('click', function() {
     const data = userInfo.getUserInfo();
     popupTypeProfile.openPopup(data);
+    formValidators[profileForm.getAttribute('name')].resetValidation();
 });
 
 /*Открытие окна формы Добавить новое место*/
 buttonAddCard.addEventListener('click', function() {
     popupTypeCardAdd.openPopup();
+    formValidators[addCardForm.getAttribute('name')].resetValidation();
 });
 
 /*Открытие окна формы Изменить аватар*/
 buttonProfileAvatar.addEventListener('click', function() {
     popupTypeProfileAvatar.openPopup();
+    formValidators[profileAvatarForm.getAttribute('name')].resetValidation();
 });
 
 

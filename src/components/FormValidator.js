@@ -48,11 +48,8 @@ export default class FormValidator {
 
     resetValidation() {
       this._toggleButtonState();
-      this.formSelector.addEventListener('reset', () => {
-        this._toggleButtonState();
-        this._inputList.forEach((inputElement) => {
-          this._hideInputError(inputElement);
-        })
+      this._inputList.forEach((inputElement) => {
+        this._hideInputError(inputElement);
       })
     }
 
@@ -65,9 +62,6 @@ export default class FormValidator {
                 this._toggleButtonState();
                 this._checkInputValidity(inputElement);
             })
-            if (inputElement.value !== '') {
-                this._checkInputValidity(inputElement);
-            }
         })
     };
 
