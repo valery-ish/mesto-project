@@ -173,7 +173,7 @@ const popupTypeConfirmDelete = new PopupWithForm({
                 console.log(err);
             })
             .finally(() => {
-              popupTypeConfirmDelete.renderLoading();
+              popupTypeConfirmDelete.renderLoading('Да');
             })
     }
 });
