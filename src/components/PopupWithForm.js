@@ -31,8 +31,9 @@ export default class PopupWithForm extends Popup {
         this._resetModal();
     }
 
-    renderLoading(buttonText = 'Сохранить') {
-        this._buttonSubmit.textContent = buttonText;
+
+    renderLoading (buttonText = 'Сохранить') {
+      this._buttonSubmit.textContent = buttonText;
     }
 
     setEventListeners() {
