@@ -80,8 +80,10 @@ export default class Card {
             this._deleteCard(cardID, cardTarget);
         });
 
-        this._img.addEventListener('click', () => {
-            this._openImage(this._title, this._link);
+        this._img.addEventListener('click', (evt) => {
+            const cardName = evt.target.closest('.card__image').alt
+            const cardLink = evt.target.closest('.card__image').src
+            this._openImage(cardName, cardLink);
         });
     }
 }
