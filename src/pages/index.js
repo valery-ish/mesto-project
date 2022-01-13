@@ -188,8 +188,6 @@ buttonChangeProfile.addEventListener('click', function() {
     inputList[1].value = data.description;
     popupTypeProfile.openPopup();
     formValidators[profileForm.getAttribute('name')].resetValidation();
-    profileForm.querySelector('.modal__save-btn').classList.add('modal__save-btn_inactive');
-    profileForm.querySelector('.modal__save-btn').setAttribute("disabled", "disabled");
 });
 
 /*Открытие окна формы Добавить новое место*/
